@@ -1,215 +1,713 @@
 <!doctype html>
 <html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Mapa de Acessibilidade · Habitar Santana</title>
-<style>:root{color-scheme:light}html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
-<style>
-:root{
-  --bg:#E4E7E2; --surface:#F7F8F5; --surface-2:#EDEFEA; --ink:#181B19; --muted:#5C6460;
-  --line:#C7CCC5; --line-strong:#9AA39A;
-  --accent:#E0A100; --accent-ink:#5A4000;
-  --t1:#5D6B57; --t2:#26707E; --t5:#B05622;
-  --ok:#3F7A52; --crit:#A7322A;
-  --shadow:0 1px 2px rgba(20,28,22,.07),0 6px 18px rgba(20,28,22,.06);
-  --r:10px;
-}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  color-scheme:dark;
-  --bg:#13161A; --surface:#1B1F23; --surface-2:#232830; --ink:#E7EAE5; --muted:#98A29B;
-  --line:#333A40; --line-strong:#4C555C;
-  --accent:#F0B92B; --accent-ink:#241A00;
-  --t1:#8EA083; --t2:#4FA9B8; --t5:#DF8248;
-  --ok:#6FB185; --crit:#E0685C;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.35);
-}}
-:root[data-theme="dark"]{
-  color-scheme:dark;
-  --bg:#13161A; --surface:#1B1F23; --surface-2:#232830; --ink:#E7EAE5; --muted:#98A29B;
-  --line:#333A40; --line-strong:#4C555C;
-  --accent:#F0B92B; --accent-ink:#241A00;
-  --t1:#8EA083; --t2:#4FA9B8; --t5:#DF8248;
-  --ok:#6FB185; --crit:#E0685C;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.35);
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);
-  font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,sans-serif;font-size:15px;line-height:1.55}
-.wrap{max-width:1240px;margin:0 auto;padding-inline:16px;padding-block:0 48px}
-h1,h2,h3{font-family:Archivo,system-ui,sans-serif;margin:0;text-wrap:balance;letter-spacing:-.01em}
-.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <title>Mapa de Acessibilidade · Habitar Santana</title>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+      html,
+      body {
+        margin: 0;
+      }
+      img {
+        max-width: 100%;
+      }
+      [hidden] {
+        display: none !important;
+      }
+    </style>
+    <script>
+      try {
+        var t = localStorage.getItem("tema");
+        if (t === "light" || t === "dark")
+          document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+    />
+    <style>
+      :root {
+        --bg: #e4e7e2;
+        --surface: #f7f8f5;
+        --surface-2: #edefea;
+        --ink: #181b19;
+        --muted: #5c6460;
+        --line: #c7ccc5;
+        --line-strong: #9aa39a;
+        --accent: #e0a100;
+        --accent-ink: #5a4000;
+        --t1: #5d6b57;
+        --t2: #26707e;
+        --t5: #b05622;
+        --ok: #3f7a52;
+        --crit: #a7322a;
+        --shadow:
+          0 1px 2px rgba(20, 28, 22, 0.07), 0 6px 18px rgba(20, 28, 22, 0.06);
+        --r: 10px;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          color-scheme: dark;
+          --bg: #13161a;
+          --surface: #1b1f23;
+          --surface-2: #232830;
+          --ink: #e7eae5;
+          --muted: #98a29b;
+          --line: #333a40;
+          --line-strong: #4c555c;
+          --accent: #f0b92b;
+          --accent-ink: #241a00;
+          --t1: #8ea083;
+          --t2: #4fa9b8;
+          --t5: #df8248;
+          --ok: #6fb185;
+          --crit: #e0685c;
+          --shadow:
+            0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 22px rgba(0, 0, 0, 0.35);
+        }
+      }
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --bg: #13161a;
+        --surface: #1b1f23;
+        --surface-2: #232830;
+        --ink: #e7eae5;
+        --muted: #98a29b;
+        --line: #333a40;
+        --line-strong: #4c555c;
+        --accent: #f0b92b;
+        --accent-ink: #241a00;
+        --t1: #8ea083;
+        --t2: #4fa9b8;
+        --t5: #df8248;
+        --ok: #6fb185;
+        --crit: #e0685c;
+        --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 22px rgba(0, 0, 0, 0.35);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          "IBM Plex Sans",
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          sans-serif;
+        font-size: 15px;
+        line-height: 1.55;
+      }
+      .wrap {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding-inline: 16px;
+        padding-block: 0 48px;
+      }
+      h1,
+      h2,
+      h3 {
+        font-family: Archivo, system-ui, sans-serif;
+        margin: 0;
+        text-wrap: balance;
+        letter-spacing: -0.01em;
+      }
+      .mono {
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-variant-numeric: tabular-nums;
+      }
 
-header.top{border-bottom:1px solid var(--line);background:var(--surface);}
-.top-in{max-width:1240px;margin:0 auto;padding:18px 16px 16px;display:flex;flex-wrap:wrap;gap:14px 24px;align-items:flex-end;justify-content:space-between}
-h1{font-size:clamp(20px,3.4vw,27px);font-weight:700}
-.sub{color:var(--muted);font-size:13.5px;margin-top:3px}
-.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
-.stats{display:flex;gap:20px;flex-wrap:wrap}
-.stat b{display:block;font-family:Archivo;font-size:20px;font-weight:700;line-height:1.1}
-.stat span{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+      header.top {
+        border-bottom: 1px solid var(--line);
+        background: var(--surface);
+      }
+      .top-in {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 18px 16px 16px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px 24px;
+        align-items: flex-end;
+        justify-content: space-between;
+      }
+      h1 {
+        font-size: clamp(20px, 3.4vw, 27px);
+        font-weight: 700;
+      }
+      .sub {
+        color: var(--muted);
+        font-size: 13.5px;
+        margin-top: 3px;
+      }
+      .eyebrow {
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .top-right {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+      .stats {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      .theme-toggle {
+        width: 36px;
+        height: 36px;
+        flex: none;
+        border-radius: 50%;
+        border: 1px solid var(--line-strong);
+        background: var(--surface);
+        color: var(--ink);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        padding: 0;
+        margin-top: -7px;
+      }
+      .theme-toggle:hover {
+        background: var(--surface-2);
+      }
+      .theme-toggle svg {
+        width: 18px;
+        height: 18px;
+      }
+      .stat b {
+        display: block;
+        font-family: Archivo;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.1;
+      }
+      .stat span {
+        font-size: 11px;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
 
-.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:18px 0 12px}
-.chip{border:1px solid var(--line-strong);background:transparent;color:var(--ink);border-radius:999px;
-  padding:5px 13px;font:inherit;font-size:13px;cursor:pointer;display:inline-flex;gap:7px;align-items:center}
-.chip .dot{width:9px;height:9px;border-radius:50%}
-.chip[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
-.chip:focus-visible,button:focus-visible,select:focus-visible,textarea:focus-visible,.pt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.spacer{flex:1}
+      .bar {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin: 18px 0 12px;
+      }
+      .chip {
+        border: 1px solid var(--line-strong);
+        background: transparent;
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 5px 13px;
+        font: inherit;
+        font-size: 13px;
+        cursor: pointer;
+        display: inline-flex;
+        gap: 7px;
+        align-items: center;
+      }
+      .chip .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+      }
+      .chip[aria-pressed="true"] {
+        background: var(--ink);
+        color: var(--surface);
+        border-color: var(--ink);
+      }
+      .chip:focus-visible,
+      button:focus-visible,
+      select:focus-visible,
+      textarea:focus-visible,
+      .pt:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .spacer {
+        flex: 1;
+      }
 
-.grid{display:grid;grid-template-columns:minmax(0,1fr) 372px;gap:16px;align-items:start}
-@media (max-width:900px){.grid{grid-template-columns:1fr}}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
-.panel-h{padding:11px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;justify-content:space-between}
-.panel-h h2{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+      .grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 372px;
+        gap: 16px;
+        align-items: start;
+      }
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .panel {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--r);
+        box-shadow: var(--shadow);
+      }
+      .panel-h {
+        padding: 11px 14px;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: space-between;
+      }
+      .panel-h h2 {
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
 
-#mapa{display:block;width:100%;height:auto;background:var(--surface-2);border-radius:0 0 var(--r) var(--r)}
-.pt{cursor:pointer}
-.pt circle.halo{fill:transparent}
-.leg-box{padding:12px 14px;border-bottom:1px solid var(--line)}
-.leg-box .cat{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:3px}
-.leg-box .txt{font-size:14px;line-height:1.5}
-.leg-box .vazio{color:var(--muted);font-style:italic}
-.marco{cursor:pointer}
-.marco:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.marco.sel circle{fill:var(--accent)}
-.pt:hover circle.mk,.pt.sel circle.mk{stroke:var(--ink);stroke-width:2.4}
-.pt.sel circle.halo{fill:var(--accent);opacity:.28}
-.leg-note{padding:9px 14px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+      #mapa {
+        display: block;
+        width: 100%;
+        height: auto;
+        background: var(--surface-2);
+        border-radius: 0 0 var(--r) var(--r);
+      }
+      .pt {
+        cursor: pointer;
+      }
+      .pt circle.halo {
+        fill: transparent;
+      }
+      .leg-box {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--line);
+      }
+      .leg-box .cat {
+        font-size: 11px;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 600;
+        margin-bottom: 3px;
+      }
+      .leg-box .txt {
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .leg-box .vazio {
+        color: var(--muted);
+        font-style: italic;
+      }
+      .marco {
+        cursor: pointer;
+      }
+      .marco:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .marco.sel circle {
+        fill: var(--accent);
+      }
+      .pt:hover circle.mk,
+      .pt.sel circle.mk {
+        stroke: var(--ink);
+        stroke-width: 2.4;
+      }
+      .pt.sel circle.halo {
+        fill: var(--accent);
+        opacity: 0.28;
+      }
+      .leg-note {
+        padding: 9px 14px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 12px;
+      }
 
-.insp{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
-.ph{width:100%;aspect-ratio:9/16;max-height:46vh;object-fit:cover;background:var(--surface-2);display:block}
-.ph-wrap{position:relative;border-bottom:1px solid var(--line)}
-.badge{position:absolute;left:10px;top:10px;background:var(--ink);color:var(--surface);border-radius:6px;
-  padding:3px 9px;font-size:12px;font-weight:600;letter-spacing:.04em}
-.meta{padding:11px 14px;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:12.5px;border-bottom:1px solid var(--line)}
-.meta dt{color:var(--muted)}
-.meta dd{margin:0}
-.form{padding:13px 14px;display:grid;gap:9px}
-label.lb{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
-select,textarea,input[type=text]{width:100%;font:inherit;font-size:14px;color:var(--ink);background:var(--surface-2);
-  border:1px solid var(--line-strong);border-radius:7px;padding:7px 9px}
-textarea{min-height:82px;resize:vertical;line-height:1.45}
-.row{display:flex;gap:8px;align-items:center}
-.pri{background:var(--accent);color:var(--accent-ink);border:1px solid transparent;border-radius:7px;
-  padding:8px 15px;font:inherit;font-weight:600;cursor:pointer}
-.pri:disabled{opacity:.45;cursor:not-allowed}
-.gh{background:transparent;border:1px solid var(--line-strong);color:var(--ink);border-radius:7px;padding:8px 13px;font:inherit;cursor:pointer}
-.status{font-size:12.5px;color:var(--muted);min-height:1.2em}
-.warn{background:var(--surface-2);border-top:1px solid var(--line);padding:10px 14px;font-size:12.5px;color:var(--muted)}
+      .insp {
+        position: sticky;
+        top: calc(env(safe-area-inset-top, 0px) + 12px);
+      }
+      .ph {
+        width: 100%;
+        aspect-ratio: 9/16;
+        max-height: 46vh;
+        object-fit: cover;
+        background: var(--surface-2);
+        display: block;
+      }
+      .ph-wrap {
+        position: relative;
+        border-bottom: 1px solid var(--line);
+      }
+      .badge {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        background: var(--ink);
+        color: var(--surface);
+        border-radius: 6px;
+        padding: 3px 9px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+      }
+      .meta {
+        padding: 11px 14px;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 4px 14px;
+        font-size: 12.5px;
+        border-bottom: 1px solid var(--line);
+      }
+      .meta dt {
+        color: var(--muted);
+      }
+      .meta dd {
+        margin: 0;
+      }
+      .form {
+        padding: 13px 14px;
+        display: grid;
+        gap: 9px;
+      }
+      label.lb {
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      select,
+      textarea,
+      input[type="text"] {
+        width: 100%;
+        font: inherit;
+        font-size: 14px;
+        color: var(--ink);
+        background: var(--surface-2);
+        border: 1px solid var(--line-strong);
+        border-radius: 7px;
+        padding: 7px 9px;
+      }
+      textarea {
+        min-height: 82px;
+        resize: vertical;
+        line-height: 1.45;
+      }
+      .row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .pri {
+        background: var(--accent);
+        color: var(--accent-ink);
+        border: 1px solid transparent;
+        border-radius: 7px;
+        padding: 8px 15px;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .pri:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+      .gh {
+        background: transparent;
+        border: 1px solid var(--line-strong);
+        color: var(--ink);
+        border-radius: 7px;
+        padding: 8px 13px;
+        font: inherit;
+        cursor: pointer;
+      }
+      .status {
+        font-size: 12.5px;
+        color: var(--muted);
+        min-height: 1.2em;
+      }
+      .warn {
+        background: var(--surface-2);
+        border-top: 1px solid var(--line);
+        padding: 10px 14px;
+        font-size: 12.5px;
+        color: var(--muted);
+      }
 
-.achados{margin-top:34px}
-.ach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px;margin-top:14px}
-.ach{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 17px;box-shadow:var(--shadow)}
-.ach .rail{width:34px;height:4px;border-radius:2px;display:block;margin-bottom:11px}
-.ach h3{font-size:16px;font-weight:600}
-.ach .cnt{font-size:12px;color:var(--muted);margin:2px 0 12px}
-.ach ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
-.ach li{font-size:13.5px;line-height:1.5}
-.ach li b{display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+      .achados {
+        margin-top: 34px;
+      }
+      .ach-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+        gap: 16px;
+        margin-top: 14px;
+      }
+      .ach {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--r);
+        padding: 16px 17px;
+        box-shadow: var(--shadow);
+      }
+      .ach .rail {
+        width: 34px;
+        height: 4px;
+        border-radius: 2px;
+        display: block;
+        margin-bottom: 11px;
+      }
+      .ach h3 {
+        font-size: 16px;
+        font-weight: 600;
+      }
+      .ach .cnt {
+        font-size: 12px;
+        color: var(--muted);
+        margin: 2px 0 12px;
+      }
+      .ach ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 9px;
+      }
+      .ach li {
+        font-size: 13.5px;
+        line-height: 1.5;
+      }
+      .ach li b {
+        display: block;
+        font-size: 11px;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 600;
+      }
 
-.tbl-wrap{overflow-x:auto;margin-top:14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
-table{border-collapse:collapse;width:100%;font-size:13px;min-width:620px}
-th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
-th{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;white-space:nowrap}
-tr:last-child td{border-bottom:0}
-tbody tr{cursor:pointer}
-tbody tr:hover{background:var(--surface-2)}
-td.id{font-weight:600;white-space:nowrap}
-.pill{display:inline-block;border-radius:999px;padding:1px 9px;font-size:11.5px;border:1px solid var(--line-strong);color:var(--muted)}
-footer{margin-top:34px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);padding-top:14px}
-@media (prefers-reduced-motion:no-preference){.pt circle.mk{transition:r .12s ease}}
-</style>
-<style>
-.sync{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
-.led{width:8px;height:8px;border-radius:50%;background:var(--line-strong);flex:none}
-.led.on{background:var(--ok)} .led.off{background:var(--crit)}
-.setup{background:var(--surface);border:1px dashed var(--line-strong);border-radius:var(--r);padding:14px 16px;margin:16px 0;font-size:13.5px}
-.setup code{background:var(--surface-2);padding:1px 5px;border-radius:4px;font-family:"IBM Plex Mono",monospace;font-size:12.5px}
-.aut{font-size:12px;color:var(--muted);margin-top:6px}
-a.btn{display:block;text-decoration:none;text-align:center}
-a.btn:hover{filter:brightness(1.05)}
-</style>
-</head>
-<body>
-<header class="top"><div class="top-in">
-<div>
-<div class="eyebrow">Projeto de extensão · Habitar Santana</div>
-<h1>Mapa de Acessibilidade</h1>
-<div class="sub" id="sub">Reconhecimento de território no entorno do campus Santana</div>
-</div>
-<div class="stats">
-<div class="stat"><b class="mono" id="nFotos">-</b><span>fotos</span></div>
-<div class="stat"><b class="mono" id="nRotas">-</b><span>rotas</span></div>
-<div class="stat"><b class="mono" id="nLeg">0</b><span>legendas</span></div>
-</div>
-</div></header>
+      footer {
+        margin-top: 34px;
+        color: var(--muted);
+        font-size: 12.5px;
+        border-top: 1px solid var(--line);
+        padding-top: 14px;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .pt circle.mk {
+          transition: r 0.12s ease;
+        }
+      }
+    </style>
+    <style>
+      .sync {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+      .led {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--line-strong);
+        flex: none;
+      }
+      .led.on {
+        background: var(--ok);
+      }
+      .led.off {
+        background: var(--crit);
+      }
+      .setup {
+        background: var(--surface);
+        border: 1px dashed var(--line-strong);
+        border-radius: var(--r);
+        padding: 14px 16px;
+        margin: 16px 0;
+        font-size: 13.5px;
+      }
+      .setup code {
+        background: var(--surface-2);
+        padding: 1px 5px;
+        border-radius: 4px;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12.5px;
+      }
+      .aut {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+      a.btn {
+        display: block;
+        text-decoration: none;
+        text-align: center;
+      }
+      a.btn:hover {
+        filter: brightness(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <div class="top-in">
+        <div>
+          <div class="eyebrow">Projeto de extensão · Habitar Santana</div>
+          <h1>Mapa de Acessibilidade</h1>
+          <div class="sub" id="sub">
+            Reconhecimento de território no entorno do campus Santana
+          </div>
+        </div>
+        <div class="top-right">
+          <button
+            class="theme-toggle"
+            id="bTema"
+            aria-pressed="false"
+            aria-label="Alternar modo escuro"
+            title="Alternar modo escuro"
+          ></button>
+          <div class="stats">
+            <div class="stat">
+              <b class="mono" id="nFotos">-</b><span>fotos</span>
+            </div>
+            <div class="stat">
+              <b class="mono" id="nRotas">-</b><span>rotas</span>
+            </div>
+            <div class="stat">
+              <b class="mono" id="nLeg">0</b><span>legendas</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
 
-<div class="wrap">
-<div id="setup" class="setup" hidden></div>
+    <div class="wrap">
+      <div id="setup" class="setup" hidden></div>
 
-<div class="bar" id="chips"></div>
-<div class="bar" style="margin-top:0">
-<span class="sync"><span class="led" id="led"></span><span id="syncTxt">carregando…</span></span>
-<button class="chip" id="bSync">Atualizar legendas</button>
-<span class="spacer"></span>
-<button class="chip" id="cTab" aria-pressed="false">Ver como tabela</button>
-<button class="chip" id="exCsv">Baixar CSV</button>
-</div>
+      <div class="bar" id="chips"></div>
+      <div class="bar" style="margin-top: 0">
+        <span class="sync"
+          ><span class="led" id="led"></span
+          ><span id="syncTxt">carregando…</span></span
+        >
+        <button class="chip" id="bSync">Atualizar legendas</button>
+      </div>
 
-<div class="grid">
-<section class="panel">
-<div class="panel-h"><h2>Percurso registrado</h2><span class="mono" style="font-size:12px;color:var(--muted)" id="coordBox"></span></div>
-<svg id="mapa" viewBox="0 0 1000 1000" role="img" aria-label="Mapa dos pontos fotografados"></svg>
-<p class="leg-note">Cada ponto é uma fotografia, posicionada pela coordenada GPS gravada no arquivo. A linha cheia liga os registros em ordem de horário e reconstitui o caminho percorrido. Fotos tiradas no mesmo ponto recebem um deslocamento visual mínimo para não se sobreporem.
-<br>A linha tracejada é a T-1, que não tem registro fotográfico. O traçado é uma referência deduzida do endereço do campus e da esquina com a T-2, não um levantamento.
-<br>Os marcadores são pontos de referência e podem ser clicados. O de contorno tracejado fica fora da área percorrida, encostado na borda, com a distância até o campus ao lado do nome.</p>
-</section>
+      <div class="grid">
+        <section class="panel">
+          <div class="panel-h">
+            <h2>Percurso registrado</h2>
+            <span
+              class="mono"
+              style="font-size: 12px; color: var(--muted)"
+              id="coordBox"
+            ></span>
+          </div>
+          <svg
+            id="mapa"
+            viewBox="0 0 1000 1000"
+            role="img"
+            aria-label="Mapa dos pontos fotografados"
+          ></svg>
+          <p class="leg-note">
+            Cada ponto é uma fotografia, posicionada pela coordenada GPS gravada
+            no arquivo. A linha cheia liga os registros em ordem de horário e
+            reconstitui o caminho percorrido. Fotos tiradas no mesmo ponto
+            recebem um deslocamento visual mínimo para não se sobreporem.
+          </p>
+        </section>
 
-<aside class="panel insp" id="insp">
-<div class="ph-wrap"><span class="badge mono" id="bId">-</span><img class="ph" id="bImg" alt="" src=""></div>
-<div class="leg-box" id="boxLegenda">
-<div class="cat" id="bCat">Sem categoria</div>
-<div class="txt" id="bTxt"></div>
-<div class="aut" id="bAut"></div>
-</div>
-<dl class="meta">
-<dt>Arquivo</dt><dd class="mono" id="bFile"></dd>
-<dt>Horário</dt><dd class="mono" id="bHora"></dd>
-<dt>Coordenada</dt><dd class="mono" id="bCoord"></dd>
-<dt>Altitude</dt><dd class="mono" id="bAlt"></dd>
-</dl>
-<div class="form">
-<a class="pri btn" id="bEscrever" href="#" target="_blank" rel="noopener">Escrever legenda</a>
-<p class="status" id="bMarcoNota" hidden style="margin:0"></p>
-<div class="row"><button class="gh" id="bPrev" style="flex:1">&#8592; anterior</button><button class="gh" id="bNext" style="flex:1">próximo &#8594;</button></div>
-<div class="status" id="bStatus">Escrever exige conta Google. A legenda aparece no mapa na próxima sincronização.</div>
-</div>
-<div class="warn"><a id="bSheet" href="#" target="_blank" rel="noopener">Abrir a planilha do grupo</a></div>
-</aside>
-</div>
+        <aside class="panel insp" id="insp">
+          <div class="ph-wrap">
+            <span class="badge mono" id="bId">-</span
+            ><img class="ph" id="bImg" alt="" src="" />
+          </div>
+          <div class="leg-box" id="boxLegenda">
+            <div class="cat" id="bCat">Sem categoria</div>
+            <div class="txt" id="bTxt"></div>
+            <div class="aut" id="bAut"></div>
+          </div>
+          <dl class="meta">
+            <dt id="dtRua" hidden>Rua</dt>
+            <dd id="bRua" hidden></dd>
+            <dt id="dtFile">Arquivo</dt>
+            <dd class="mono" id="bFile"></dd>
+            <dt id="dtHora">Horário</dt>
+            <dd class="mono" id="bHora"></dd>
+            <dt>Coordenada</dt>
+            <dd class="mono" id="bCoord"></dd>
+            <dt>Altitude</dt>
+            <dd class="mono" id="bAlt"></dd>
+          </dl>
+          <div class="form">
+            <a
+              class="pri btn"
+              id="bEscrever"
+              href="#"
+              target="_blank"
+              rel="noopener"
+              >Escrever legenda</a
+            >
+            <p class="status" id="bMarcoNota" hidden style="margin: 0"></p>
+            <div class="row">
+              <button class="gh" id="bPrev" style="flex: 1">
+                &#8592; anterior</button
+              ><button class="gh" id="bNext" style="flex: 1">
+                próximo &#8594;
+              </button>
+            </div>
+            <div class="status" id="bStatus">
+              Escrever exige conta Google. A legenda aparece no mapa na próxima
+              sincronização.
+            </div>
+          </div>
+          <div class="warn">
+            <a id="bSheet" href="#" target="_blank" rel="noopener"
+              >Abrir a planilha do grupo</a
+            >
+          </div>
+        </aside>
+      </div>
 
-<div id="tabela" hidden>
-<div class="tbl-wrap"><table>
-<thead><tr><th>Ponto</th><th>Rota</th><th>Horário</th><th>Coordenada</th><th>Categoria</th><th>Legenda</th></tr></thead>
-<tbody id="tb"></tbody></table></div>
-</div>
+      <section class="achados">
+        <div class="eyebrow">Anotações de campo</div>
+        <h2 style="font-size: 19px; margin-top: 4px">
+          O que cada trajeto registrou
+        </h2>
+        <div class="ach-grid" id="ach"></div>
+      </section>
 
-<section class="achados">
-<div class="eyebrow">Anotações de campo</div>
-<h2 style="font-size:19px;margin-top:4px">O que cada trajeto registrou</h2>
-<div class="ach-grid" id="ach"></div>
-</section>
+      <footer>
+        &copy; 2026
+        <a
+          href="https://github.com/davidcaetanor/map-habitar-santana"
+          target="_blank"
+          rel="noopener"
+          >Habitar Santana</a
+        >
+      </footer>
+    </div>
 
-<footer>
-Faixa livre mínima de referência: 1,20 m de largura e 2,10 m de altura (NBR 9050). Manutenção do passeio a cargo do proprietário do imóvel (Lei municipal 15.442/2011). Rede de mobilidade a pé e requalificação de calçadas e travessias (Estatuto do Pedestre, Lei 16.673/2017, Decreto 59.670/2020).
-<br>Pontos gerados a partir do EXIF das fotografias. Legendas lidas da planilha compartilhada do grupo.
-</footer>
-</div>
-
-<script src="app.js"></script>
-</body>
+    <script src="app.js"></script>
+  </body>
 </html>

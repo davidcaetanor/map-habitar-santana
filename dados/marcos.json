@@ -8,7 +8,8 @@
   "lon": -46.625658,
   "foto": "campus.jpg",
   "creditoFoto": "Google Street View",
-  "curto": "São Judas"
+  "curto": "São Judas",
+  "rua": "Rua Voluntários da Pátria"
  },
  {
   "id": "metro-santana",
@@ -19,6 +20,7 @@
   "lon": -46.624571,
   "foto": "metro-santana.jpg",
   "creditoFoto": "Google Street View",
-  "curto": "Metrô Santana"
+  "curto": "Metrô Santana",
+  "rua": "Avenida Cruzeiro do Sul"
  }
 ]

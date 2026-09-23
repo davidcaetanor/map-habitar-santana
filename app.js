@@ -110,6 +110,7 @@ function desenhaMarco(m) {
     x = Math.max(limite, Math.min(SZ - limite, x));
     y = Math.max(limite, Math.min(SZ - limite, y));
   }
+  m._x = x; m._y = y;
   const g = el('g', { class: 'marco' + (sel && sel.id === m.id ? ' sel' : ''), tabindex: 0, role: 'button',
     'aria-label': m.nome + ', ' + m.endereco });
   const t = el('title', {});
@@ -128,7 +129,6 @@ function desenhaMarco(m) {
     'font-size': 19 * escala, 'font-family': 'Archivo, sans-serif', 'font-weight': 600 });
   txt.textContent = rotulo;
   g.appendChild(txt);
-  g.addEventListener('click', () => seleciona(m.id));
   g.addEventListener('keydown', ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); seleciona(m.id); } });
   return g;
 }
@@ -174,7 +174,6 @@ function desenha() {
         'font-size': 21, 'font-family': 'IBM Plex Mono, monospace', 'font-weight': 500 });
       tx.textContent = p.id; grp.appendChild(tx);
     }
-    grp.addEventListener('click', () => seleciona(p.id));
     grp.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); seleciona(p.id); } });
     g.appendChild(grp);
   });
@@ -203,10 +202,13 @@ function seleciona(id) {
   $('bId').textContent = p.id;
   $('bImg').src = 'thumbs/' + p.th;
   $('bImg').alt = 'Registro fotográfico ' + p.id + ' da rota ' + p.t;
+  $('dtFile').textContent = 'Arquivo';
+  $('dtHora').textContent = 'Horário';
   $('bFile').textContent = p.f;
   $('bHora').textContent = p.h;
   $('bCoord').textContent = p.lat.toFixed(6) + ', ' + p.lon.toFixed(6);
   $('bAlt').textContent = p.alt + ' m';
+  mostraRua(p.rua);
   const L = legendas.get(p.id);
   $('bCat').textContent = (L && L.cat) ? L.cat : 'Sem categoria';
   if (L && L.txt) $('bTxt').textContent = L.txt;
@@ -228,6 +230,8 @@ function selecionaMarco(m) {
   $('bId').textContent = m.tipo === 'metro' ? 'Metrô' : 'Campus';
   $('bImg').src = m.foto ? 'marcos/' + m.foto : '';
   $('bImg').alt = m.nome;
+  $('dtFile').textContent = 'Nome';
+  $('dtHora').textContent = 'Endereço';
   $('bFile').textContent = m.nome;
   $('bHora').textContent = m.endereco;
   $('bCoord').textContent = m.lat.toFixed(6) + ', ' + m.lon.toFixed(6);
@@ -237,7 +241,39 @@ function selecionaMarco(m) {
     : 'referência do território';
   $('bMarcoNota').textContent = 'Ponto de referência do território, não é registro de campo.' +
     (m.creditoFoto ? ' Imagem: ' + m.creditoFoto + '.' : '');
+  mostraRua(m.rua);
   desenha();
+}
+
+function mostraRua(rua) {
+  const tem = !!rua;
+  $('dtRua').hidden = !tem;
+  $('bRua').hidden = !tem;
+  if (tem) $('bRua').textContent = rua;
+}
+
+// clique unico no mapa, em vez de um clique por circulo: em agrupamentos densos os
+// halos se sobrepoem e o navegador pode escolher o circulo errado por ordem de
+// desenho; aqui sempre ganha o ponto/marco cujo centro esta mais perto do clique
+function clicaNoMapa(ev) {
+  const svg = $('mapa');
+  const pt = svg.createSVGPoint();
+  pt.x = ev.clientX; pt.y = ev.clientY;
+  const ctm = svg.getScreenCTM();
+  if (!ctm) return;
+  const p = pt.matrixTransform(ctm.inverse());
+  let alvo = null, menor = 22;
+  MARCOS.forEach(m => {
+    if (m._x == null) return;
+    const d = Math.hypot(m._x - p.x, m._y - p.y);
+    if (d < menor) { menor = d; alvo = m.id; }
+  });
+  PTS.forEach(q => {
+    if (!filtro[q.t] || (soLeg && !legendas.has(q.id))) return;
+    const d = Math.hypot(q._x - p.x, q._y - p.y);
+    if (d < menor) { menor = d; alvo = q.id; }
+  });
+  if (alvo) seleciona(alvo);
 }
 
 function vazio() {
@@ -254,42 +290,21 @@ function vizinho(d) {
   seleciona(vis[(i + d + vis.length) % vis.length].id);
 }
 
-function renderTabela() {
-  const tb = $('tb'); tb.textContent = '';
-  PTS.filter(p => filtro[p.t] && (!soLeg || legendas.has(p.id))).forEach(p => {
-    const L = legendas.get(p.id) || {};
-    const tr = document.createElement('tr');
-    tr.onclick = () => seleciona(p.id);
-    const c = (t, cl) => { const td = document.createElement('td'); if (cl) td.className = cl; td.textContent = t; return td; };
-    tr.appendChild(c(p.id, 'id mono'));
-    const td2 = document.createElement('td');
-    const sp = document.createElement('span'); sp.className = 'pill'; sp.textContent = p.t;
-    sp.style.color = cor(p.t); sp.style.borderColor = cor(p.t); td2.appendChild(sp); tr.appendChild(td2);
-    tr.appendChild(c(p.h, 'mono'));
-    tr.appendChild(c(p.lat.toFixed(5) + ', ' + p.lon.toFixed(5), 'mono'));
-    tr.appendChild(c(L.cat || '-'));
-    tr.appendChild(c(L.txt || '-'));
-    tb.appendChild(tr);
-  });
-}
-
 function montaChips() {
   const bar = $('chips'); bar.textContent = '';
+  const lb = document.createElement('span'); lb.className = 'eyebrow'; lb.textContent = 'Rotas'; bar.appendChild(lb);
   Object.keys(ROTAS).forEach(c => {
-    const n = PTS.filter(p => p.t === c).length;
     const b = document.createElement('button');
     b.className = 'chip'; b.setAttribute('aria-pressed', 'true');
     const d = document.createElement('span'); d.className = 'dot'; d.style.background = cor(c);
     b.appendChild(d);
-    b.appendChild(document.createTextNode(ROTAS[c].nome || c));
-    if (n) b.appendChild(document.createTextNode(' · ' + n));
-    else if (ROTAS[c].tracado) b.appendChild(document.createTextNode(' · traçado'));
-    b.onclick = () => { const v = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', v); filtro[c] = v; desenha(); renderTabela(); };
+    b.appendChild(document.createTextNode(c.replace('T', 'T-')));
+    b.onclick = () => { const v = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', v); filtro[c] = v; desenha(); };
     bar.appendChild(b);
   });
   const bl = document.createElement('button');
   bl.className = 'chip'; bl.setAttribute('aria-pressed', 'false'); bl.textContent = 'Só com legenda';
-  bl.onclick = () => { const v = bl.getAttribute('aria-pressed') !== 'true'; bl.setAttribute('aria-pressed', v); soLeg = v; desenha(); renderTabela(); };
+  bl.onclick = () => { const v = bl.getAttribute('aria-pressed') !== 'true'; bl.setAttribute('aria-pressed', v); soLeg = v; desenha(); };
   bar.appendChild(bl);
 }
 
@@ -326,7 +341,7 @@ function aplica(lista) {
   $('nLeg').textContent = legendas.size;
   $('led').className = 'led on';
   $('syncTxt').textContent = 'legendas lidas às ' + new Date().toLocaleTimeString('pt-BR');
-  desenha(); renderTabela(); if (sel && !MARCOS.some(m => m.id === sel.id)) seleciona(sel.id);
+  desenha(); if (sel && !MARCOS.some(m => m.id === sel.id)) seleciona(sel.id);
 }
 
 function sincroniza() {
@@ -355,25 +370,11 @@ function sincroniza() {
     });
 }
 
-function baixaCSV() {
-  const esc = v => '"' + String(v).replace(/"/g, '""') + '"';
-  const cab = ['ponto', 'rota', 'arquivo', 'hora', 'lat', 'lon', 'categoria', 'legenda', 'autor'];
-  const linhas = PTS.map(p => {
-    const L = legendas.get(p.id) || {};
-    return [p.id, p.t, p.f, p.h, p.lat, p.lon, L.cat || '', L.txt || '', L.autor || ''];
-  });
-  const csv = String.fromCharCode(65279) + [cab.join(';')].concat(linhas.map(r => r.map(esc).join(';'))).join(String.fromCharCode(13, 10));
-  const b = new Blob([csv], { type: 'text/csv;charset=utf-8' });
-  const u = URL.createObjectURL(b), a = document.createElement('a');
-  a.href = u; a.download = 'pontos-habitar-santana.csv';
-  document.body.appendChild(a); a.click();
-  setTimeout(() => { URL.revokeObjectURL(u); a.remove(); }, 400);
-}
-
+const CB = '?cb=' + Date.now();
 Promise.all([
-  fetch('dados/pontos.json').then(r => r.json()),
-  fetch('dados/rotas.json').then(r => r.json()),
-  fetch('dados/marcos.json').then(r => r.ok ? r.json() : []).catch(() => [])
+  fetch('dados/pontos.json' + CB, { cache: 'no-store' }).then(r => r.json()),
+  fetch('dados/rotas.json' + CB, { cache: 'no-store' }).then(r => r.json()),
+  fetch('dados/marcos.json' + CB, { cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => [])
 ]).then(([pontos, rotas, marcos]) => {
   PTS = pontos;
   MARCOS = marcos || [];
@@ -383,7 +384,7 @@ Promise.all([
   $('nRotas').textContent = Object.keys(ROTAS).length;
   const datas = [...new Set(PTS.map(p => p.d))].sort();
   if (datas.length) $('sub').textContent = 'Reconhecimento de território no entorno do campus Santana · ' + (datas.length === 1 ? datas[0] : datas[0] + ' a ' + datas[datas.length - 1]);
-  preparaProjecao(); montaChips(); montaAchados(); renderTabela();
+  preparaProjecao(); montaChips(); montaAchados();
   if (PTS.length) seleciona(PTS[0].id); else desenha();
   if (!CONFIG.CSV) {
     const s = $('setup'); s.hidden = false;
@@ -403,12 +404,34 @@ Promise.all([
   s.innerHTML = '<b>Não consegui carregar os dados.</b> Abrindo o arquivo direto do disco o navegador bloqueia a leitura de <code>dados/pontos.json</code>. Suba num servidor (<code>python -m http.server</code>) ou publique no GitHub Pages. Detalhe: ' + e.message;
 });
 
+const ICONE_SOL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>';
+const ICONE_LUA = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.35 15.35A9 9 0 018.65 3.65a9 9 0 1011.7 11.7z"/></svg>';
+
+function temaAtual() {
+  const forcado = document.documentElement.getAttribute('data-theme');
+  if (forcado) return forcado;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+function atualizaBotaoTema() {
+  const escuro = temaAtual() === 'dark';
+  const b = $('bTema');
+  b.setAttribute('aria-pressed', String(escuro));
+  b.innerHTML = escuro ? ICONE_SOL : ICONE_LUA;
+  const rotulo = escuro ? 'Mudar para modo claro' : 'Mudar para modo escuro';
+  b.setAttribute('aria-label', rotulo); b.title = rotulo;
+}
+$('bTema').onclick = () => {
+  const novo = temaAtual() === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', novo);
+  try { localStorage.setItem('tema', novo); } catch (e) {}
+  atualizaBotaoTema();
+};
+atualizaBotaoTema();
+
+$('mapa').addEventListener('click', clicaNoMapa);
 $('bSync').onclick = () => sincroniza();
 $('bPrev').onclick = () => vizinho(-1);
 $('bNext').onclick = () => vizinho(1);
-$('exCsv').onclick = baixaCSV;
-$('cTab').onclick = () => { const b = $('cTab'); const v = b.getAttribute('aria-pressed') !== 'true';
-  b.setAttribute('aria-pressed', v); $('tabela').hidden = !v; b.textContent = v ? 'Ocultar tabela' : 'Ver como tabela'; };
 document.addEventListener('keydown', e => {
   if (e.target.matches('textarea,select,input')) return;
   if (e.key === 'ArrowRight') vizinho(1);
