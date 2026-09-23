@@ -69,6 +69,10 @@ h1{font-size:clamp(20px,3.4vw,27px);font-weight:700}
 #mapa{display:block;width:100%;height:auto;background:var(--surface-2);border-radius:0 0 var(--r) var(--r)}
 .pt{cursor:pointer}
 .pt circle.halo{fill:transparent}
+.leg-box{padding:12px 14px;border-bottom:1px solid var(--line)}
+.leg-box .cat{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:3px}
+.leg-box .txt{font-size:14px;line-height:1.5}
+.leg-box .vazio{color:var(--muted);font-style:italic}
 .pt:hover circle.mk,.pt.sel circle.mk{stroke:var(--ink);stroke-width:2.4}
 .pt.sel circle.halo{fill:var(--accent);opacity:.28}
 .leg-note{padding:9px 14px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
@@ -163,6 +167,11 @@ a.btn:hover{filter:brightness(1.05)}
 
 <aside class="panel insp" id="insp">
 <div class="ph-wrap"><span class="badge mono" id="bId">-</span><img class="ph" id="bImg" alt="" src=""></div>
+<div class="leg-box">
+<div class="cat" id="bCat">Sem categoria</div>
+<div class="txt" id="bTxt"></div>
+<div class="aut" id="bAut"></div>
+</div>
 <dl class="meta">
 <dt>Arquivo</dt><dd class="mono" id="bFile"></dd>
 <dt>Horário</dt><dd class="mono" id="bHora"></dd>
@@ -170,18 +179,11 @@ a.btn:hover{filter:brightness(1.05)}
 <dt>Altitude</dt><dd class="mono" id="bAlt"></dd>
 </dl>
 <div class="form">
-<div><label class="lb" for="fCat">Categoria do problema</label>
-<select id="fCat"></select></div>
-<div><label class="lb" for="fTxt">Legenda</label>
-<textarea id="fTxt" placeholder="O que a foto registra e a medida, quando houver. Ex.: raiz aflorada de 18 cm elevando o piso, faixa livre reduzida."></textarea></div>
-<div><label class="lb" for="fAut">Seu nome</label>
-<input id="fAut" type="text" autocomplete="name" placeholder="quem está escrevendo"></div>
-<div class="row"><button class="pri" id="bSave" style="flex:1">Salvar legenda</button>
-<button class="gh" id="bPrev" title="Ponto anterior">&#8592;</button>
-<button class="gh" id="bNext" title="Próximo ponto">&#8594;</button></div>
-<div class="status" id="bStatus"></div>
+<a class="pri btn" id="bEscrever" href="#" target="_blank" rel="noopener">Escrever legenda</a>
+<div class="row"><button class="gh" id="bPrev" style="flex:1">&#8592; anterior</button><button class="gh" id="bNext" style="flex:1">próximo &#8594;</button></div>
+<div class="status" id="bStatus">Escrever exige conta Google. A legenda aparece no mapa na próxima sincronização.</div>
 </div>
-<div class="warn"><a id="bSheet" href="#" target="_blank" rel="noopener">Abrir a planilha do grupo</a><span id="bAut" class="aut"></span></div>
+<div class="warn"><a id="bSheet" href="#" target="_blank" rel="noopener">Abrir a planilha do grupo</a></div>
 </aside>
 </div>
 

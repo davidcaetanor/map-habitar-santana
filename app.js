@@ -1,15 +1,11 @@
 const CONFIG = {
-  // URL /exec do Apps Script publicado como aplicativo da web. Obrigatorio.
-  API: "",
+  // Link CSV da planilha publicada na web. Le as legendas.
+  CSV: "",
+  // URL /exec do Apps Script restrito a contas Google. Abre o formulario de escrita.
+  APP: "",
   // Link da planilha, usado pelo botao "Abrir a planilha do grupo".
-  PLANILHA: "",
-  // Opcional: link CSV da planilha publicada na web, reserva se a API falhar.
-  CSV: ""
+  PLANILHA: ""
 };
-
-const CATEGORIAS = ["Piso / pavimentação", "Arborização e raízes",
-  "Rampa / rebaixamento de guia", "Piso tátil", "Drenagem", "Resíduos e lixeiras",
-  "Poste / obstáculo", "Travessia", "Uso veicular do passeio", "Iluminação", "Outro"];
 const $ = id => document.getElementById(id);
 const NS = 'http://www.w3.org/2000/svg';
 const PALETA = ['#26707E','#B05622','#5D6B57','#7A5AA6','#A7322A','#2F6B4F','#8A6D1F','#3B5FA8'];
@@ -141,14 +137,23 @@ function seleciona(id) {
   $('bHora').textContent = p.h;
   $('bCoord').textContent = p.lat.toFixed(6) + ', ' + p.lon.toFixed(6);
   $('bAlt').textContent = p.alt + ' m';
-  const L = legendas.get(p.id) || {};
-  if (document.activeElement !== $('fTxt') && document.activeElement !== $('fCat')) {
-    $('fCat').value = L.cat || '';
-    $('fTxt').value = L.txt || '';
+  const L = legendas.get(p.id);
+  $('bCat').textContent = (L && L.cat) ? L.cat : 'Sem categoria';
+  if (L && L.txt) $('bTxt').textContent = L.txt;
+  else { $('bTxt').textContent = ''; $('bTxt').appendChild(vazio()); }
+  $('bAut').textContent = (L && L.autor) ? 'por ' + L.autor : '';
+  if (CONFIG.APP) {
+    $('bEscrever').href = CONFIG.APP + (CONFIG.APP.indexOf('?') < 0 ? '?' : '&') + 'ponto=' + encodeURIComponent(p.id);
+    $('bEscrever').textContent = (L && L.txt) ? 'Editar legenda' : 'Escrever legenda';
   }
-  $('bAut').textContent = L.autor ? 'última edição por ' + L.autor : '';
-  $('bStatus').textContent = '';
   desenha();
+}
+
+function vazio() {
+  const s = document.createElement('span');
+  s.className = 'vazio';
+  s.textContent = CONFIG.APP ? 'Sem legenda ainda.' : 'Sem legenda. Escreva na planilha do grupo.';
+  return s;
 }
 
 function vizinho(d) {
@@ -233,8 +238,12 @@ function aplica(lista) {
   desenha(); renderTabela(); if (sel) seleciona(sel.id);
 }
 
-function leCSV() {
-  if (!CONFIG.CSV) return Promise.reject(new Error('sem CSV de reserva'));
+function sincroniza() {
+  if (!CONFIG.CSV) {
+    $('led').className = 'led'; $('syncTxt').textContent = 'planilha não configurada';
+    return Promise.resolve();
+  }
+  $('syncTxt').textContent = 'sincronizando…';
   const url = CONFIG.CSV + (CONFIG.CSV.indexOf('?') < 0 ? '?' : '&') + 'cb=' + Date.now();
   return fetch(url, { cache: 'no-store' })
     .then(r => { if (!r.ok) throw new Error(r.status); return r.text(); })
@@ -248,51 +257,11 @@ function leCSV() {
       aplica(linhas.slice(1).map(l => ({
         ponto: l[iP], cat: iC >= 0 ? l[iC] : '', txt: iL >= 0 ? l[iL] : '', autor: iA >= 0 ? l[iA] : ''
       })));
+    })
+    .catch(e => {
+      $('led').className = 'led off';
+      $('syncTxt').textContent = 'não consegui ler as legendas (' + e.message + ')';
     });
-}
-
-function sincroniza() {
-  if (!CONFIG.API && !CONFIG.CSV) {
-    $('led').className = 'led'; $('syncTxt').textContent = 'planilha não configurada';
-    return Promise.resolve();
-  }
-  $('syncTxt').textContent = 'sincronizando…';
-  const passo = CONFIG.API
-    ? fetch(CONFIG.API + '?cb=' + Date.now(), { cache: 'no-store' })
-        .then(r => r.json())
-        .then(d => { if (!d.ok) throw new Error(d.erro || 'resposta inválida'); aplica(d.legendas || []); })
-    : Promise.reject(new Error('sem API'));
-  return passo.catch(() => leCSV()).catch(e => {
-    $('led').className = 'led off';
-    $('syncTxt').textContent = 'não consegui ler as legendas (' + e.message + ')';
-  });
-}
-
-function salva() {
-  const p = sel; if (!p) return;
-  const dados = { ponto: p.id, categoria: $('fCat').value,
-                  legenda: $('fTxt').value.trim(), autor: $('fAut').value.trim() };
-  try { localStorage.setItem('habitar-autor', dados.autor); } catch (e) {}
-  if (!CONFIG.API) { $('bStatus').textContent = 'Escrita não configurada. Use a planilha.'; return; }
-  $('bSave').disabled = true; $('bStatus').textContent = 'salvando…';
-  // corpo sem header customizado evita o preflight de CORS, que o Apps Script nao responde
-  fetch(CONFIG.API, { method: 'POST', body: JSON.stringify(dados) })
-    .then(r => r.json())
-    .then(d => { if (!d.ok) throw new Error(d.erro || 'recusado'); confirma(dados, 'Salvo na planilha.'); })
-    .catch(() => fetch(CONFIG.API, { method: 'POST', mode: 'no-cors', body: JSON.stringify(dados) })
-      .then(() => confirma(dados, 'Enviado. Confira na planilha se apareceu.'))
-      .catch(e => { $('bStatus').textContent = 'Não consegui salvar (' + e.message + '). Tente pela planilha.'; }))
-    .finally(() => { $('bSave').disabled = false; });
-}
-
-function confirma(dados, msg) {
-  if (dados.categoria || dados.legenda)
-    legendas.set(dados.ponto, { cat: dados.categoria, txt: dados.legenda, autor: dados.autor });
-  else legendas.delete(dados.ponto);
-  $('nLeg').textContent = legendas.size;
-  $('bStatus').textContent = msg;
-  $('bAut').textContent = dados.autor ? 'última edição por ' + dados.autor : '';
-  desenha(); renderTabela();
 }
 
 function baixaCSV() {
@@ -321,17 +290,17 @@ Promise.all([
   $('nRotas').textContent = Object.keys(ROTAS).length;
   const datas = [...new Set(PTS.map(p => p.d))].sort();
   if (datas.length) $('sub').textContent = 'Reconhecimento de território no entorno do campus Santana · ' + (datas.length === 1 ? datas[0] : datas[0] + ' a ' + datas[datas.length - 1]);
-  const sc = $('fCat');
-  sc.appendChild(new Option('-', ''));
-  CATEGORIAS.forEach(c => sc.appendChild(new Option(c, c)));
-  try { $('fAut').value = localStorage.getItem('habitar-autor') || ''; } catch (e) {}
   preparaProjecao(); montaChips(); montaAchados(); renderTabela();
   if (PTS.length) seleciona(PTS[0].id); else desenha();
-  if (!CONFIG.API && !CONFIG.CSV) {
+  if (!CONFIG.CSV) {
     const s = $('setup'); s.hidden = false;
-    s.innerHTML = '<b>Falta ligar a planilha.</b> Abra <code>app.js</code> e preencha <code>CONFIG.API</code> com a URL /exec do Apps Script publicado, e <code>CONFIG.PLANILHA</code> com o link da planilha. O passo a passo está no LEIAME.';
+    s.textContent = 'Falta ligar a planilha. Preencha CONFIG.CSV e CONFIG.APP no início do app.js.';
   }
-  if (!CONFIG.API) { $('bSave').disabled = true; $('fTxt').readOnly = true; $('fCat').disabled = true; }
+  if (!CONFIG.APP) {
+    $('bEscrever').removeAttribute('href');
+    $('bEscrever').textContent = 'Escrita não configurada';
+    $('bEscrever').style.opacity = .5;
+  }
   if (CONFIG.PLANILHA) $('bSheet').href = CONFIG.PLANILHA;
   else { $('bSheet').textContent = 'Planilha não configurada'; $('bSheet').style.opacity = .5; $('bSheet').removeAttribute('href'); }
   sincroniza();
@@ -342,7 +311,6 @@ Promise.all([
 });
 
 $('bSync').onclick = () => sincroniza();
-$('bSave').onclick = salva;
 $('bPrev').onclick = () => vizinho(-1);
 $('bNext').onclick = () => vizinho(1);
 $('exCsv').onclick = baixaCSV;
