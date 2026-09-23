@@ -2,9 +2,9 @@ const CONFIG = {
   // Link CSV da planilha publicada na web. Le as legendas.
   CSV: "",
   // URL /exec do Apps Script restrito a contas Google. Abre o formulario de escrita.
-  APP: "",
+  APP: "https://script.google.com/macros/s/AKfycbwIvC9s11R-GYjnFxJB6tGdwjl5EkCzkdVqUfC_6VYcwqnLq9tbjQZKyWt0LGaMBb0f/exec",
   // Link da planilha, usado pelo botao "Abrir a planilha do grupo".
-  PLANILHA: ""
+  PLANILHA: "https://docs.google.com/spreadsheets/d/1vxRpqyhKK3WvguPPpOrMi6nMN6FbiiIEY5SUm2ktBYQ/edit"
 };
 const $ = id => document.getElementById(id);
 const NS = 'http://www.w3.org/2000/svg';
