@@ -1,6 +1,6 @@
 const CONFIG = {
   // Link CSV da planilha publicada na web. Le as legendas.
-  CSV: "",
+  CSV: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQAC4K6d8S7mPSxVfCe3BWO8DQPtiZbxr42zqihAbK00MpXu_h65r6WLPcWGICATaU35YRhUYIKa9Hi/pub?gid=71030450&single=true&output=csv",
   // URL /exec do Apps Script restrito a contas Google. Abre o formulario de escrita.
   APP: "https://script.google.com/macros/s/AKfycbwIvC9s11R-GYjnFxJB6tGdwjl5EkCzkdVqUfC_6VYcwqnLq9tbjQZKyWt0LGaMBb0f/exec",
   // Link da planilha, usado pelo botao "Abrir a planilha do grupo".
