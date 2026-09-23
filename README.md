@@ -28,9 +28,9 @@ O Habitar Santana é um mapa interativo estático que documenta problemas de ace
 
 ## Quero adicionar mais fotos
 
-Por enquanto vá a uma das 3 rotas do projeto e tire a foto com a *localização ligada*, isso é de suma importancia para que tenhamos o nó no local correto.
+Por enquanto vá a uma das 3 rotas do projeto e tire a foto com a **localização ligada**, isso é de suma importancia para que tenhamos o nó no local correto.
 
-- Tire as fotos com a *localização do celular ativada.*
+- Tire as fotos com a **localização do celular ativada.**
 - Hoje ainda não existe um jeito de enviar direto pelo site, então encaminhe a foto pro drive do grupo e comunique no chat.
 - Após isso o nó ja deve ser criado e habilitado pra legenda
 
