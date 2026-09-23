@@ -1,0 +1,134 @@
+[
+ {
+  "codigo": "T1",
+  "nome": "T-1 · Voluntários da Pátria, frente ao campus",
+  "cor": "#5D6B57",
+  "achados": [
+   [
+    "Passeio",
+    "Calçada com falhas, buracos e ausência de revestimento em diversos trechos."
+   ],
+   [
+    "Rampas",
+    "Ausência de rampa de acessibilidade e de rebaixamento de guia adequado."
+   ],
+   [
+    "Drenagem",
+    "Canaleta de escoamento entre guia e sarjeta mal preservada e obstruída por resíduos; boca de lobo também obstruída."
+   ],
+   [
+    "Resíduos",
+    "Grande acúmulo de lixo no chão e ausência de lixeiras públicas ao longo do percurso."
+   ],
+   [
+    "Arborização",
+    "Árvore com as mesmas condições críticas dos demais trajetos: interferência no pavimento e falta de espaço para permeabilidade do solo."
+   ],
+   [
+    "Conflito pedestre x veículo",
+    "Veículos estacionam ou param sobre a faixa de pedestres para embarque e desembarque de alunos, comprometendo a travessia."
+   ],
+   [
+    "Piso tátil",
+    "Presente apenas no ponto de ônibus e num acesso de garagem de condomínio, este aparentemente instalado por iniciativa particular."
+   ]
+  ],
+  "tracado": [
+   [
+    -23.496619,
+    -46.625267
+   ],
+   [
+    -23.498871,
+    -46.626969
+   ]
+  ],
+  "tracadoNota": "Traçado de referência da Voluntários da Pátria, deduzido do endereço do campus e da esquina com a T2. Sem registro fotográfico."
+ },
+ {
+  "codigo": "T2",
+  "nome": "T-2 · via da lanchonete até o mercado",
+  "cor": "#26707E",
+  "achados": [
+   [
+    "Arborização",
+    "10 árvores mapeadas. Troncos de 18, 32, 18 e 46 cm de diâmetro. A primeira apresenta raiz aflorada de 18 cm, causando elevação e desnível acentuado na calçada."
+   ],
+   [
+    "Solo",
+    "Necessidade de adequação do entorno das árvores para permeabilidade do solo e preservação das raízes."
+   ],
+   [
+    "Passeio",
+    "Calçadas em ambos os lados com pisos faltantes."
+   ],
+   [
+    "Drenagem",
+    "Trecho sem boca de lobo."
+   ],
+   [
+    "Resíduos",
+    "Sem lixeira pública, com resíduos descartados no chão."
+   ],
+   [
+    "Rede elétrica",
+    "Poste de metal antigo com sinais severos de deterioração e em posição irregular."
+   ],
+   [
+    "Ponto de táxi",
+    "Espaço delimitado com 3,37 m de largura, sinalização viária desgastada e sem coluna de sinalização para travessia."
+   ],
+   [
+    "Esquina T2 x T1",
+    "Área jardinada com árvores de médio porte, desnível na interface entre jardim e calçada e irregularidades na pavimentação."
+   ],
+   [
+    "Acessibilidade",
+    "Sem piso tátil direcional ou de alerta; sem rebaixamento de guia e sem rampas."
+   ]
+  ]
+ },
+ {
+  "codigo": "T5",
+  "nome": "T-5 · trecho em declive, condomínios e Centro POP",
+  "cor": "#B05622",
+  "achados": [
+   [
+    "Contraste de conservação",
+    "Calçadas preservadas em frente aos quatro condomínios e a cerca de cinco imóveis residenciais; passeio mal conservado e com acúmulo de resíduos em frente ao Centro POP."
+   ],
+   [
+    "Declividade",
+    "Inclinação de aproximadamente 45 graus entre calçada e guia, com acessibilidade registrada como nula."
+   ],
+   [
+    "Obstáculos",
+    "Três postes da rede elétrica posicionados no centro do passeio, constituindo barreiras arquitetônicas."
+   ],
+   [
+    "Escada irregular",
+    "Estrutura particular com 95 cm de largura útil, com deformações e desníveis no pavimento."
+   ],
+   [
+    "Drenagem",
+    "Tubulação de águas pluviais ou esgoto despejando no meio do leito de circulação, sem sinalização. Duas bocas de lobo aparentemente desativadas."
+   ],
+   [
+    "Travessia",
+    "Faixa de pedestres sinalizada na esquina, porém sem rebaixamento de guia ou rampa para PCD."
+   ],
+   [
+    "Uso veicular do passeio",
+    "Sinalização horizontal de vagas sobre a calçada; o desnível descaracterizou o passeio, funcionando como rampa de acesso veicular."
+   ],
+   [
+    "Resíduos",
+    "Primeira lixeira do percurso identificada só no segundo condomínio, de uso aparente do próprio condomínio."
+   ],
+   [
+    "Acessibilidade",
+    "Sem piso tátil direcional ou de alerta; sem rebaixamento de guia e sem rampas."
+   ]
+  ]
+ }
+]

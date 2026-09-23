@@ -1,0 +1,8 @@
+CLAUDE.md
+_to_delete/
+fotos/
+node_modules/
+.DS_Store
+Thumbs.db
+*LEIA.md
+apps-script/
