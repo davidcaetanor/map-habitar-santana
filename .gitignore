@@ -6,3 +6,4 @@ node_modules/
 Thumbs.db
 *LEIA.md
 apps-script/
+__pycache__/

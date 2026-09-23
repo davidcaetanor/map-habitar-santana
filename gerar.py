@@ -3,6 +3,7 @@
 import json, os, re, sys
 from PIL import Image, ImageOps
 from PIL.ExifTags import GPSTAGS
+from ruas import busca_rua, carrega_cache_ruas, salva_cache_ruas
 
 RAIZ = os.path.dirname(os.path.abspath(__file__))
 FOTOS = sys.argv[1] if len(sys.argv) > 1 else os.path.join(RAIZ, 'fotos')
@@ -31,6 +32,7 @@ def main():
     os.makedirs(DADOS, exist_ok=True)
 
     pontos, rotas_vistas, sem_gps = [], [], []
+    cache_ruas = carrega_cache_ruas()
 
     for pasta in sorted(os.listdir(FOTOS)):
         caminho = os.path.join(FOTOS, pasta)
@@ -63,13 +65,17 @@ def main():
                     mini.thumbnail((LADO, LADO))
                     mini.convert('RGB').save(os.path.join(THUMBS, destino), 'JPEG',
                                              quality=QUALIDADE, optimize=True)
-                registros.append({
+                registro = {
                     't': cod, 'f': nome, 'th': destino,
                     'd': quando[:10].replace(':', '/'), 'h': quando[11:],
                     'lat': round(lat, 6), 'lon': round(lon, 6),
                     'alt': round(float(g.get('GPSAltitude', 0) or 0), 1),
                     '_ord': quando,
-                })
+                }
+                rua = busca_rua(lat, lon, cache_ruas)
+                if rua:
+                    registro['rua'] = rua
+                registros.append(registro)
             except Exception as erro:
                 sem_gps.append(pasta + '/' + nome + ' (' + str(erro) + ')')
 
@@ -101,6 +107,7 @@ def main():
               ensure_ascii=False, separators=(',', ':'))
     json.dump(rotas, open(caminho_rotas, 'w', encoding='utf-8'),
               ensure_ascii=False, indent=1)
+    salva_cache_ruas(cache_ruas)
 
     with open(os.path.join(DADOS, 'legendas-modelo.csv'), 'w', encoding='utf-8-sig', newline='') as fh:
         fh.write('ponto,categoria,legenda,autor\n')
