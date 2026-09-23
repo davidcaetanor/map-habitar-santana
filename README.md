@@ -39,3 +39,10 @@ Por enquanto vá a uma das 3 rotas do projeto e tire a foto com a **localizaçã
 - Para escrever ou editar uma legenda, é preciso estar logado numa conta Google. 
 - Todos com acesso ao drive do grupo possuem a permissão necessaria.
 - Por organização, prefiro que editem as legendas somente pelo site.
+
+## Membros do Projeto
+- Beatriz Neves Candido
+- Tamara S. O. Ferreira
+- Cauã Raphael Paulucio Siqueira
+- Gabrielle Azevedo Lima 
+- David S Caetano Ribeiro
