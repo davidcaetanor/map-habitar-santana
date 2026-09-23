@@ -1,0 +1,24 @@
+[
+ {
+  "id": "campus",
+  "nome": "São Judas, campus Santana",
+  "endereco": "R. Voluntários da Pátria, 2624",
+  "tipo": "campus",
+  "lat": -23.497136,
+  "lon": -46.625658,
+  "foto": "campus.jpg",
+  "creditoFoto": "Google Street View",
+  "curto": "São Judas"
+ },
+ {
+  "id": "metro-santana",
+  "nome": "Estação Santana do Metrô",
+  "endereco": "Santana, São Paulo, 02030-200",
+  "tipo": "metro",
+  "lat": -23.502463,
+  "lon": -46.624571,
+  "foto": "metro-santana.jpg",
+  "creditoFoto": "Google Street View",
+  "curto": "Metrô Santana"
+ }
+]

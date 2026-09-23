@@ -10,7 +10,7 @@ const $ = id => document.getElementById(id);
 const NS = 'http://www.w3.org/2000/svg';
 const PALETA = ['#26707E','#B05622','#5D6B57','#7A5AA6','#A7322A','#2F6B4F','#8A6D1F','#3B5FA8'];
 
-let PTS = [], ROTAS = {}, legendas = new Map(), filtro = {}, soLeg = false, sel = null;
+let PTS = [], ROTAS = {}, MARCOS = [], legendas = new Map(), filtro = {}, soLeg = false, sel = null;
 
 function el(n, at) { const e = document.createElementNS(NS, n); for (const a in at) e.setAttribute(a, at[a]); return e; }
 function cor(codigo) { return (ROTAS[codigo] && ROTAS[codigo].cor) || '#888'; }
@@ -37,6 +37,11 @@ function normaliza(s) {
 
 let proj, projLatLon, metrosPorUnidade;
 const PAD = 70, SZ = 1000;
+function distanciaMetros(a, b) {
+  const mLat = 111320, mLon = 111320 * Math.cos(a[0] * Math.PI / 180);
+  return Math.hypot((b[1] - a[1]) * mLon, (b[0] - a[0]) * mLat);
+}
+
 function coordenadasDoMapa() {
   const c = PTS.map(p => [p.lat, p.lon]);
   Object.keys(ROTAS).forEach(k => (ROTAS[k].tracado || []).forEach(t => c.push(t)));
@@ -70,6 +75,64 @@ function preparaProjecao() {
   $('coordBox').textContent = lat0.toFixed(4) + ', ' + lon0.toFixed(4);
 }
 
+function glifoCampus(g, x, y, escala) {
+  const e = v => v * escala;
+  g.appendChild(el('path', { d: 'M ' + (x - e(11)) + ' ' + (y + e(10)) + ' L ' + (x - e(11)) + ' ' + (y - e(1)) +
+    ' L ' + x + ' ' + (y - e(11)) + ' L ' + (x + e(11)) + ' ' + (y - e(1)) + ' L ' + (x + e(11)) + ' ' + (y + e(10)) + ' Z',
+    fill: 'var(--ink)' }));
+  g.appendChild(el('rect', { x: x - e(3), y: y + e(2), width: e(6), height: e(8), fill: 'var(--surface)' }));
+  g.appendChild(el('path', { d: 'M ' + x + ' ' + (y - e(11)) + ' L ' + x + ' ' + (y - e(19)) +
+    ' L ' + (x + e(10)) + ' ' + (y - e(17)) + ' L ' + x + ' ' + (y - e(15)),
+    fill: 'var(--accent)', stroke: 'var(--accent)', 'stroke-width': e(1.5), 'stroke-linejoin': 'round' }));
+}
+
+function glifoMetro(g, x, y, escala) {
+  const e = v => v * escala;
+  g.appendChild(el('rect', { x: x - e(10), y: y - e(11), width: e(20), height: e(17), rx: e(4), fill: 'var(--ink)' }));
+  g.appendChild(el('rect', { x: x - e(7), y: y - e(8), width: e(5.5), height: e(5), fill: 'var(--surface)' }));
+  g.appendChild(el('rect', { x: x + e(1.5), y: y - e(8), width: e(5.5), height: e(5), fill: 'var(--surface)' }));
+  g.appendChild(el('rect', { x: x - e(7), y: y - e(1), width: e(14), height: e(2), fill: 'var(--surface)' }));
+  g.appendChild(el('path', { d: 'M ' + (x - e(7)) + ' ' + (y + e(6)) + ' L ' + (x - e(11)) + ' ' + (y + e(12)) +
+    ' M ' + (x + e(7)) + ' ' + (y + e(6)) + ' L ' + (x + e(11)) + ' ' + (y + e(12)),
+    stroke: 'var(--ink)', 'stroke-width': e(2.4), 'stroke-linecap': 'round' }));
+}
+
+function desenhaMarco(m) {
+  let [x, y] = projLatLon(m.lat, m.lon);
+  const limite = 30;
+  const fora = x < limite || x > SZ - limite || y < limite || y > SZ - limite;
+  const escala = fora ? 0.72 : 1;
+  let rotulo = m.curto || m.nome.split(',')[0];
+  if (fora) {
+    const ancora = MARCOS.find(o => o.tipo === 'campus') || m;
+    const d = Math.round(distanciaMetros([ancora.lat, ancora.lon], [m.lat, m.lon]) / 10) * 10;
+    if (d) rotulo += ', ' + d + ' m';
+    x = Math.max(limite, Math.min(SZ - limite, x));
+    y = Math.max(limite, Math.min(SZ - limite, y));
+  }
+  const g = el('g', { class: 'marco' + (sel && sel.id === m.id ? ' sel' : ''), tabindex: 0, role: 'button',
+    'aria-label': m.nome + ', ' + m.endereco });
+  const t = el('title', {});
+  t.textContent = m.nome + ', ' + m.endereco + (fora ? ' (fora da área percorrida)' : '');
+  g.appendChild(t);
+  g.appendChild(el('circle', { cx: x, cy: y, r: 22 * escala, fill: 'var(--surface)',
+    stroke: 'var(--ink)', 'stroke-width': 2.4 * escala,
+    'stroke-dasharray': fora ? '5 4' : 'none' }));
+  if (m.tipo === 'metro') glifoMetro(g, x, y, escala); else glifoCampus(g, x, y, escala);
+  const margem = 160;
+  const ancoragem = x < margem ? 'start' : (x > SZ - margem ? 'end' : 'middle');
+  const deslocaX = ancoragem === 'start' ? 26 * escala : (ancoragem === 'end' ? -26 * escala : 0);
+  const acima = y > SZ - 70;
+  const txt = el('text', { x: x + deslocaX, y: acima ? y - 32 * escala : y + 40 * escala,
+    'text-anchor': ancoragem, fill: 'var(--ink)',
+    'font-size': 19 * escala, 'font-family': 'Archivo, sans-serif', 'font-weight': 600 });
+  txt.textContent = rotulo;
+  g.appendChild(txt);
+  g.addEventListener('click', () => seleciona(m.id));
+  g.addEventListener('keydown', ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); seleciona(m.id); } });
+  return g;
+}
+
 function desenha() {
   const svg = $('mapa'); svg.textContent = '';
   const g = el('g', {});
@@ -96,6 +159,7 @@ function desenha() {
       'stroke-dasharray': '14 11', opacity: .5
     }));
   });
+  MARCOS.forEach(m => g.appendChild(desenhaMarco(m)));
   PTS.forEach(p => {
     if (!filtro[p.t]) return;
     if (soLeg && !legendas.has(p.id)) return;
@@ -129,7 +193,13 @@ function desenha() {
 }
 
 function seleciona(id) {
+  const m = MARCOS.find(o => o.id === id);
+  if (m) return selecionaMarco(m);
   const p = PTS.find(q => q.id === id); if (!p) return; sel = p;
+  $('boxLegenda').hidden = false;
+  $('bEscrever').hidden = false;
+  $('bStatus').hidden = false;
+  $('bMarcoNota').hidden = true;
   $('bId').textContent = p.id;
   $('bImg').src = 'thumbs/' + p.th;
   $('bImg').alt = 'Registro fotográfico ' + p.id + ' da rota ' + p.t;
@@ -146,6 +216,27 @@ function seleciona(id) {
     $('bEscrever').href = CONFIG.APP + (CONFIG.APP.indexOf('?') < 0 ? '?' : '&') + 'ponto=' + encodeURIComponent(p.id);
     $('bEscrever').textContent = (L && L.txt) ? 'Editar legenda' : 'Escrever legenda';
   }
+  desenha();
+}
+
+function selecionaMarco(m) {
+  sel = m;
+  $('boxLegenda').hidden = true;
+  $('bEscrever').hidden = true;
+  $('bStatus').hidden = true;
+  $('bMarcoNota').hidden = false;
+  $('bId').textContent = m.tipo === 'metro' ? 'Metrô' : 'Campus';
+  $('bImg').src = m.foto ? 'marcos/' + m.foto : '';
+  $('bImg').alt = m.nome;
+  $('bFile').textContent = m.nome;
+  $('bHora').textContent = m.endereco;
+  $('bCoord').textContent = m.lat.toFixed(6) + ', ' + m.lon.toFixed(6);
+  const ancora = MARCOS.find(o => o.tipo === 'campus');
+  $('bAlt').textContent = (ancora && ancora.id !== m.id)
+    ? Math.round(distanciaMetros([ancora.lat, ancora.lon], [m.lat, m.lon])) + ' m do campus'
+    : 'referência do território';
+  $('bMarcoNota').textContent = 'Ponto de referência do território, não é registro de campo.' +
+    (m.creditoFoto ? ' Imagem: ' + m.creditoFoto + '.' : '');
   desenha();
 }
 
@@ -235,7 +326,7 @@ function aplica(lista) {
   $('nLeg').textContent = legendas.size;
   $('led').className = 'led on';
   $('syncTxt').textContent = 'legendas lidas às ' + new Date().toLocaleTimeString('pt-BR');
-  desenha(); renderTabela(); if (sel) seleciona(sel.id);
+  desenha(); renderTabela(); if (sel && !MARCOS.some(m => m.id === sel.id)) seleciona(sel.id);
 }
 
 function sincroniza() {
@@ -281,9 +372,11 @@ function baixaCSV() {
 
 Promise.all([
   fetch('dados/pontos.json').then(r => r.json()),
-  fetch('dados/rotas.json').then(r => r.json())
-]).then(([pontos, rotas]) => {
+  fetch('dados/rotas.json').then(r => r.json()),
+  fetch('dados/marcos.json').then(r => r.ok ? r.json() : []).catch(() => [])
+]).then(([pontos, rotas, marcos]) => {
   PTS = pontos;
+  MARCOS = marcos || [];
   rotas.forEach((r, i) => { ROTAS[r.codigo] = Object.assign({ cor: PALETA[i % PALETA.length] }, r); filtro[r.codigo] = true; });
   PTS.forEach(p => { if (!ROTAS[p.t]) { ROTAS[p.t] = { codigo: p.t, nome: p.t, cor: PALETA[Object.keys(ROTAS).length % PALETA.length], achados: [] }; filtro[p.t] = true; } });
   $('nFotos').textContent = PTS.length;

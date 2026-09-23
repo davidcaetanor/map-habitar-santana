@@ -73,6 +73,9 @@ h1{font-size:clamp(20px,3.4vw,27px);font-weight:700}
 .leg-box .cat{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:3px}
 .leg-box .txt{font-size:14px;line-height:1.5}
 .leg-box .vazio{color:var(--muted);font-style:italic}
+.marco{cursor:pointer}
+.marco:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.marco.sel circle{fill:var(--accent)}
 .pt:hover circle.mk,.pt.sel circle.mk{stroke:var(--ink);stroke-width:2.4}
 .pt.sel circle.halo{fill:var(--accent);opacity:.28}
 .leg-note{padding:9px 14px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
@@ -162,12 +165,13 @@ a.btn:hover{filter:brightness(1.05)}
 <div class="panel-h"><h2>Percurso registrado</h2><span class="mono" style="font-size:12px;color:var(--muted)" id="coordBox"></span></div>
 <svg id="mapa" viewBox="0 0 1000 1000" role="img" aria-label="Mapa dos pontos fotografados"></svg>
 <p class="leg-note">Cada ponto é uma fotografia, posicionada pela coordenada GPS gravada no arquivo. A linha cheia liga os registros em ordem de horário e reconstitui o caminho percorrido. Fotos tiradas no mesmo ponto recebem um deslocamento visual mínimo para não se sobreporem.
-<br>A linha tracejada é a T-1, que não tem registro fotográfico. O traçado é uma referência deduzida do endereço do campus e da esquina com a T-2, não um levantamento.</p>
+<br>A linha tracejada é a T-1, que não tem registro fotográfico. O traçado é uma referência deduzida do endereço do campus e da esquina com a T-2, não um levantamento.
+<br>Os marcadores são pontos de referência e podem ser clicados. O de contorno tracejado fica fora da área percorrida, encostado na borda, com a distância até o campus ao lado do nome.</p>
 </section>
 
 <aside class="panel insp" id="insp">
 <div class="ph-wrap"><span class="badge mono" id="bId">-</span><img class="ph" id="bImg" alt="" src=""></div>
-<div class="leg-box">
+<div class="leg-box" id="boxLegenda">
 <div class="cat" id="bCat">Sem categoria</div>
 <div class="txt" id="bTxt"></div>
 <div class="aut" id="bAut"></div>
@@ -180,6 +184,7 @@ a.btn:hover{filter:brightness(1.05)}
 </dl>
 <div class="form">
 <a class="pri btn" id="bEscrever" href="#" target="_blank" rel="noopener">Escrever legenda</a>
+<p class="status" id="bMarcoNota" hidden style="margin:0"></p>
 <div class="row"><button class="gh" id="bPrev" style="flex:1">&#8592; anterior</button><button class="gh" id="bNext" style="flex:1">próximo &#8594;</button></div>
 <div class="status" id="bStatus">Escrever exige conta Google. A legenda aparece no mapa na próxima sincronização.</div>
 </div>
