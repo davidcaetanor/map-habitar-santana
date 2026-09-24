@@ -2,9 +2,7 @@ const CONFIG = {
   // Link CSV da planilha publicada na web. Le as legendas.
   CSV: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQAC4K6d8S7mPSxVfCe3BWO8DQPtiZbxr42zqihAbK00MpXu_h65r6WLPcWGICATaU35YRhUYIKa9Hi/pub?gid=71030450&single=true&output=csv",
   // URL /exec do Apps Script restrito a contas Google. Abre o formulario de escrita.
-  APP: "https://script.google.com/macros/s/AKfycbwIvC9s11R-GYjnFxJB6tGdwjl5EkCzkdVqUfC_6VYcwqnLq9tbjQZKyWt0LGaMBb0f/exec",
-  // Link da planilha, usado pelo botao "Abrir a planilha do grupo".
-  PLANILHA: "https://docs.google.com/spreadsheets/d/1vxRpqyhKK3WvguPPpOrMi6nMN6FbiiIEY5SUm2ktBYQ/edit"
+  APP: "https://script.google.com/macros/s/AKfycbwIvC9s11R-GYjnFxJB6tGdwjl5EkCzkdVqUfC_6VYcwqnLq9tbjQZKyWt0LGaMBb0f/exec"
 };
 const $ = id => document.getElementById(id);
 const NS = 'http://www.w3.org/2000/svg';
@@ -395,8 +393,6 @@ Promise.all([
     $('bEscrever').textContent = 'Escrita não configurada';
     $('bEscrever').style.opacity = .5;
   }
-  if (CONFIG.PLANILHA) $('bSheet').href = CONFIG.PLANILHA;
-  else { $('bSheet').textContent = 'Planilha não configurada'; $('bSheet').style.opacity = .5; $('bSheet').removeAttribute('href'); }
   sincroniza();
   setInterval(sincroniza, 120000);
 }).catch(e => {

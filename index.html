@@ -444,12 +444,70 @@
         color: var(--muted);
         min-height: 1.2em;
       }
-      .warn {
+      .pesq {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
         background: var(--surface-2);
         border-top: 1px solid var(--line);
-        padding: 10px 14px;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      .pesq:hover {
+        background: var(--surface);
+      }
+      .pesq:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: -2px;
+      }
+      .pesq-ico {
+        width: 34px;
+        height: 34px;
+        flex: none;
+        border-radius: 50%;
+        background: var(--accent);
+        color: var(--accent-ink);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .pesq-ico svg {
+        width: 18px;
+        height: 18px;
+      }
+      .pesq-txt {
+        flex: 1;
+        min-width: 0;
+        line-height: 1.35;
+      }
+      .pesq-txt b {
+        display: block;
+        font-family: Archivo, system-ui, sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .pesq-txt span {
+        display: block;
+        margin-top: 1px;
         font-size: 12.5px;
         color: var(--muted);
+      }
+      .pesq-seta {
+        width: 18px;
+        height: 18px;
+        flex: none;
+        color: var(--muted);
+        transition: transform 0.15s ease;
+      }
+      .pesq:hover .pesq-seta {
+        transform: translateX(3px);
+        color: var(--ink);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .pesq-seta {
+          transition: none;
+        }
       }
 
       .achados {
@@ -681,11 +739,40 @@
               sincronização.
             </div>
           </div>
-          <div class="warn">
-            <a id="bSheet" href="#" target="_blank" rel="noopener"
-              >Abrir a planilha do grupo</a
+          <a class="pesq" href="pesquisa/?o=site" target="_blank" rel="noopener">
+            <span class="pesq-ico" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"
+                />
+                <rect x="8" y="2" width="8" height="4" rx="1" />
+                <path d="M9 12h6M9 16h4" />
+              </svg>
+            </span>
+            <span class="pesq-txt">
+              <b>Como é viver em Santana?</b>
+              <span>Responda a pesquisa do projeto. Leva 3 minutos e é anônima.</span>
+            </span>
+            <svg
+              class="pesq-seta"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
             >
-          </div>
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </a>
         </aside>
       </div>
 
