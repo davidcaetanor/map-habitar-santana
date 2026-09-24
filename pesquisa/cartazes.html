@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <title>Cartazes da pesquisa</title>
+    <style>
+        @page {
+            size: A5 portrait;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #d9d9d9;
+            font: 16px/1.4 system-ui, Arial, Helvetica, sans-serif;
+            color: #111;
+        }
+
+        .cartaz {
+            width: 148mm;
+            height: 210mm;
+            margin: 8mm auto;
+            padding: 12mm 12mm 9mm;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            page-break-after: always;
+            break-after: page;
+        }
+
+        .selo {
+            font-size: 3.4mm;
+            letter-spacing: 0.4mm;
+            text-transform: uppercase;
+            color: #444;
+            margin: 0 0 3mm;
+        }
+
+        h1 {
+            font-size: 8.5mm;
+            line-height: 1.1;
+            margin: 0 0 3mm;
+        }
+
+        .chamada {
+            font-size: 4.1mm;
+            margin: 0 0 4mm;
+            max-width: 122mm;
+        }
+
+        .qr {
+            width: 62mm;
+            height: 62mm;
+            flex: none;
+        }
+
+        .qr svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .instrucao {
+            font-size: 4.1mm;
+            font-weight: 600;
+            margin: 3mm 0 1mm;
+        }
+
+        .endereco {
+            font-size: 3.2mm;
+            color: #444;
+            margin: 0 0 4mm;
+            word-break: break-all;
+        }
+
+        .servico {
+            width: 100%;
+            flex: none;
+            border: 0.9mm solid #111;
+            border-radius: 3mm;
+            padding: 3mm 4mm;
+            margin-top: auto;
+        }
+
+        .servico small {
+            display: block;
+            font-size: 4.4mm;
+            font-weight: 600;
+        }
+
+        .servico strong {
+            display: block;
+            font-size: 11mm;
+            line-height: 1.1;
+        }
+
+        .servico span {
+            display: block;
+            font-size: 3.4mm;
+            margin-top: 1mm;
+        }
+
+        .rodape {
+            font-size: 2.9mm;
+            color: #555;
+            margin: 3mm 0 0;
+            flex: none;
+        }
+
+        .cartaz:last-child {
+            page-break-after: auto;
+            break-after: auto;
+        }
+
+        @media print {
+            body {
+                background: #fff;
+            }
+
+            .cartaz {
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<section class="cartaz">
+    <p class="selo">Projeto de extensão USJT</p>
+    <h1>Como é viver em Santana?</h1>
+    <p class="chamada">Conte como está a segurança, a acessibilidade e a sustentabilidade no bairro e na sua moradia.
+        Leva 3 minutos e é anônimo.</p>
+    <div class="qr">
+        <svg viewBox="0 0 49 49" class="segno">
+            <path fill="#fff" d="M0 0h49v49h-49z"/>
+            <path class="qrline" stroke="#000"
+                  d="M4 4.5h7m1 0h3m1 0h4m1 0h1m2 0h4m1 0h1m4 0h3m1 0h7m-41 1h1m5 0h1m3 0h3m1 0h2m1 0h2m1 0h1m1 0h2m1 0h4m3 0h1m1 0h1m5 0h1m-41 1h1m1 0h3m1 0h1m2 0h1m1 0h1m3 0h3m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m6 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h4m3 0h1m1 0h3m1 0h3m1 0h2m1 0h1m4 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m1 0h1m1 0h2m2 0h4m1 0h3m1 0h2m3 0h1m2 0h2m1 0h1m1 0h3m1 0h1m-41 1h1m5 0h1m1 0h1m1 0h1m2 0h3m1 0h2m3 0h1m1 0h2m1 0h2m3 0h1m1 0h1m5 0h1m-41 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-30 1h1m2 0h1m1 0h1m1 0h1m3 0h1m3 0h1m1 0h1m1 0h1m1 0h1m-32 1h7m1 0h2m1 0h2m1 0h4m1 0h1m3 0h3m2 0h1m5 0h2m3 0h1m-38 1h3m1 0h1m1 0h1m1 0h6m2 0h1m1 0h2m2 0h1m2 0h1m1 0h3m1 0h3m1 0h3m-41 1h7m1 0h1m1 0h1m1 0h3m2 0h1m4 0h3m1 0h2m1 0h2m1 0h1m1 0h3m-36 1h3m3 0h2m1 0h2m1 0h1m3 0h4m1 0h2m2 0h3m1 0h3m1 0h1m1 0h2m-37 1h3m2 0h4m1 0h2m1 0h3m5 0h6m1 0h5m3 0h2m-39 1h6m2 0h1m3 0h1m1 0h1m3 0h1m1 0h2m3 0h1m1 0h1m1 0h4m1 0h7m-40 1h2m1 0h4m3 0h4m2 0h2m4 0h5m1 0h1m2 0h2m1 0h1m1 0h2m-37 1h1m2 0h1m2 0h3m1 0h1m1 0h10m2 0h2m2 0h1m1 0h1m1 0h4m-36 1h2m2 0h2m2 0h3m1 0h4m1 0h3m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m1 0h3m-40 1h2m3 0h1m1 0h2m4 0h2m1 0h1m1 0h6m2 0h1m1 0h1m2 0h2m1 0h3m2 0h2m-40 1h1m1 0h4m1 0h1m1 0h2m1 0h1m3 0h2m8 0h1m1 0h2m1 0h3m1 0h1m1 0h1m-39 1h1m1 0h1m5 0h2m1 0h1m3 0h2m2 0h1m1 0h1m1 0h2m1 0h1m1 0h1m2 0h1m4 0h2m1 0h2m-37 1h1m1 0h2m4 0h2m3 0h2m1 0h3m1 0h1m4 0h1m2 0h1m5 0h1m1 0h1m-40 1h2m1 0h1m2 0h2m1 0h1m1 0h1m1 0h1m3 0h1m1 0h4m2 0h1m3 0h3m1 0h1m1 0h1m1 0h3m-41 1h2m1 0h5m3 0h1m3 0h4m2 0h2m4 0h2m1 0h1m2 0h1m1 0h3m-38 1h1m1 0h2m1 0h1m1 0h1m2 0h1m2 0h1m2 0h3m2 0h2m3 0h1m1 0h1m4 0h2m1 0h2m1 0h1m-40 1h1m1 0h2m1 0h4m1 0h2m2 0h3m2 0h2m1 0h5m2 0h1m1 0h1m1 0h1m3 0h2m-39 1h2m1 0h1m1 0h1m1 0h4m1 0h2m1 0h3m2 0h1m1 0h2m4 0h2m1 0h1m1 0h5m2 0h1m-40 1h1m1 0h1m2 0h1m3 0h1m1 0h2m1 0h2m2 0h1m4 0h1m2 0h3m2 0h1m1 0h1m1 0h1m-37 1h1m1 0h1m1 0h1m2 0h1m2 0h1m3 0h1m1 0h1m3 0h3m3 0h2m2 0h3m1 0h4m-38 1h1m1 0h3m1 0h1m3 0h1m1 0h4m1 0h1m1 0h2m1 0h1m2 0h2m2 0h1m1 0h2m4 0h3m-40 1h6m1 0h1m1 0h1m1 0h5m3 0h1m1 0h1m2 0h1m1 0h2m2 0h2m1 0h4m2 0h2m-41 1h1m5 0h3m1 0h2m8 0h1m6 0h1m4 0h3m3 0h1m-39 1h1m2 0h1m3 0h1m4 0h2m2 0h3m1 0h1m1 0h1m1 0h1m2 0h2m1 0h6m3 0h1m-40 1h1m2 0h4m1 0h1m1 0h1m1 0h3m2 0h1m3 0h2m2 0h3m1 0h1m1 0h6m1 0h3m-33 1h1m1 0h2m3 0h1m2 0h1m4 0h1m1 0h1m2 0h5m3 0h1m1 0h3m-41 1h7m1 0h1m2 0h1m2 0h4m1 0h1m1 0h2m2 0h8m1 0h1m1 0h2m-38 1h1m5 0h1m1 0h1m2 0h1m2 0h2m2 0h1m2 0h2m2 0h1m1 0h1m2 0h3m3 0h2m-38 1h1m1 0h3m1 0h1m1 0h1m4 0h3m1 0h1m2 0h3m1 0h1m1 0h2m1 0h1m2 0h8m-40 1h1m1 0h3m1 0h1m1 0h2m4 0h2m2 0h2m1 0h4m3 0h1m2 0h1m1 0h1m1 0h1m3 0h1m-40 1h1m1 0h3m1 0h1m1 0h1m1 0h1m3 0h4m1 0h3m2 0h1m1 0h4m1 0h8m-39 1h1m5 0h1m1 0h1m2 0h1m1 0h1m1 0h1m1 0h2m1 0h3m1 0h1m1 0h2m2 0h1m1 0h1m3 0h2m1 0h1m-40 1h7m2 0h1m5 0h1m1 0h1m1 0h1m2 0h1m2 0h2m2 0h1m1 0h1m1 0h1m1 0h2m1 0h1"/>
+        </svg>
+    </div>
+    <p class="instrucao">Aponte a câmera do celular para o QR code</p>
+    <p class="endereco">davidcaetanor.github.io/map-habitar-santana/pesquisa</p>
+    <div class="servico">
+        <small>Problema no bairro?</small>
+        <strong>Ligue 156</strong>
+        <span>Prefeitura de São Paulo: buraco, calçada, iluminação, lixo, árvore. Também no aplicativo SP156.</span>
+    </div>
+    <p class="rodape">INTEGRA-HABITAR: Moradia Segura, Acessível e Sustentável. Ponto: USJT - CAMPUS</p>
+</section>
+<section class="cartaz">
+    <p class="selo">Projeto de extensão USJT</p>
+    <h1>Como é viver em Santana?</h1>
+    <p class="chamada">Conte como está a segurança, a acessibilidade e a sustentabilidade no bairro e na sua moradia.
+        Leva 3 minutos e é anônimo.</p>
+    <div class="qr">
+        <svg viewBox="0 0 53 53" class="segno">
+            <path fill="#fff" d="M0 0h53v53h-53z"/>
+            <path class="qrline" stroke="#000"
+                  d="M4 4.5h7m5 0h2m1 0h2m1 0h1m2 0h1m1 0h1m2 0h3m1 0h4m2 0h1m1 0h7m-45 1h1m5 0h1m1 0h5m3 0h1m1 0h5m4 0h2m3 0h1m2 0h1m2 0h1m5 0h1m-45 1h1m1 0h3m1 0h1m5 0h4m1 0h1m4 0h2m1 0h1m3 0h2m2 0h1m1 0h1m2 0h1m1 0h3m1 0h1m-45 1h1m1 0h3m1 0h1m1 0h1m2 0h2m1 0h1m3 0h1m3 0h1m2 0h5m2 0h2m1 0h2m1 0h1m1 0h3m1 0h1m-45 1h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h3m1 0h7m1 0h1m1 0h1m1 0h3m1 0h3m1 0h1m1 0h3m1 0h1m-45 1h1m5 0h1m2 0h1m1 0h1m1 0h1m1 0h1m2 0h3m3 0h2m2 0h2m8 0h1m5 0h1m-45 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-37 1h1m2 0h1m2 0h1m2 0h4m3 0h1m1 0h3m2 0h1m1 0h4m-36 1h1m1 0h4m1 0h4m1 0h2m5 0h6m2 0h1m1 0h2m5 0h2m1 0h2m1 0h1m-42 1h3m2 0h2m1 0h1m4 0h1m1 0h3m2 0h2m1 0h8m1 0h5m1 0h1m1 0h1m-41 1h1m3 0h1m1 0h3m2 0h1m5 0h1m1 0h2m4 0h3m2 0h1m1 0h1m1 0h2m3 0h1m2 0h1m-44 1h4m2 0h2m2 0h2m3 0h1m1 0h1m1 0h2m1 0h2m2 0h1m4 0h1m1 0h1m2 0h1m3 0h2m1 0h1m-45 1h1m1 0h2m2 0h1m1 0h1m1 0h3m3 0h1m1 0h2m2 0h2m2 0h1m1 0h1m2 0h2m2 0h1m1 0h2m1 0h2m1 0h2m-41 1h1m3 0h3m1 0h1m1 0h2m1 0h1m1 0h2m5 0h1m2 0h2m1 0h1m2 0h2m1 0h1m1 0h1m2 0h1m-43 1h6m1 0h1m2 0h2m1 0h4m5 0h2m1 0h2m1 0h1m1 0h1m1 0h2m2 0h6m-39 1h2m2 0h4m1 0h5m1 0h2m4 0h2m2 0h1m5 0h1m1 0h1m3 0h3m-44 1h1m1 0h5m1 0h1m2 0h1m2 0h1m2 0h1m6 0h3m3 0h5m2 0h1m1 0h1m4 0h1m-45 1h2m1 0h1m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m1 0h4m3 0h2m1 0h2m1 0h2m2 0h3m2 0h2m1 0h1m1 0h1m-44 1h1m4 0h2m5 0h4m4 0h3m1 0h1m1 0h1m5 0h1m3 0h1m1 0h4m1 0h1m-45 1h1m1 0h1m1 0h1m2 0h1m1 0h1m1 0h4m14 0h1m1 0h1m1 0h2m1 0h3m1 0h4m-42 1h1m1 0h5m4 0h1m2 0h3m1 0h7m8 0h6m3 0h1m-41 1h1m3 0h1m2 0h1m3 0h1m2 0h3m3 0h2m3 0h1m3 0h4m3 0h1m2 0h1m-44 1h2m2 0h1m1 0h1m1 0h1m2 0h3m3 0h1m1 0h2m1 0h1m1 0h1m1 0h1m1 0h4m2 0h1m1 0h1m1 0h1m1 0h5m-43 1h3m3 0h7m1 0h5m3 0h1m4 0h2m1 0h1m1 0h3m3 0h1m1 0h1m1 0h1m-42 1h6m1 0h1m3 0h1m3 0h1m1 0h5m3 0h1m1 0h1m1 0h1m1 0h1m1 0h5m-41 1h1m6 0h3m1 0h3m3 0h2m1 0h1m1 0h1m2 0h6m2 0h1m1 0h1m2 0h2m2 0h2m-42 1h2m2 0h1m1 0h3m2 0h3m1 0h2m1 0h1m1 0h2m2 0h1m2 0h1m2 0h1m2 0h2m4 0h2m-43 1h2m1 0h1m1 0h1m4 0h4m1 0h2m2 0h3m2 0h1m1 0h2m4 0h1m1 0h2m4 0h5m-45 1h3m3 0h1m1 0h4m2 0h1m1 0h1m1 0h1m1 0h1m9 0h2m3 0h1m1 0h1m1 0h3m1 0h2m-44 1h2m1 0h2m1 0h1m1 0h5m1 0h1m2 0h1m3 0h3m1 0h3m1 0h1m1 0h3m2 0h4m2 0h2m-44 1h4m1 0h1m4 0h1m1 0h1m1 0h1m4 0h1m1 0h1m1 0h1m3 0h1m4 0h1m3 0h2m1 0h2m2 0h1m-44 1h2m1 0h1m5 0h1m1 0h9m2 0h1m4 0h1m1 0h1m2 0h3m4 0h3m1 0h1m-44 1h1m4 0h1m1 0h2m1 0h3m1 0h2m1 0h4m2 0h2m2 0h4m2 0h1m1 0h3m4 0h1m-44 1h2m2 0h2m4 0h5m2 0h1m1 0h3m1 0h4m2 0h2m1 0h4m1 0h5m-38 1h1m1 0h1m1 0h2m1 0h1m2 0h1m2 0h2m1 0h4m2 0h2m1 0h1m1 0h2m1 0h1m1 0h3m3 0h3m-44 1h4m2 0h2m2 0h1m2 0h1m1 0h1m1 0h3m3 0h2m3 0h2m1 0h1m1 0h1m3 0h3m1 0h2m-44 1h1m2 0h2m1 0h2m1 0h2m3 0h2m3 0h6m3 0h3m1 0h9m3 0h1m-37 1h3m6 0h1m1 0h2m3 0h2m3 0h3m3 0h2m3 0h1m1 0h2m-44 1h7m3 0h1m1 0h9m1 0h1m1 0h2m2 0h1m3 0h5m1 0h1m1 0h2m-42 1h1m5 0h1m1 0h1m2 0h6m1 0h3m3 0h2m3 0h2m2 0h1m1 0h2m3 0h3m1 0h1m-45 1h1m1 0h3m1 0h1m1 0h1m2 0h1m1 0h1m6 0h7m2 0h1m2 0h1m1 0h1m1 0h6m1 0h2m-45 1h1m1 0h3m1 0h1m1 0h4m5 0h2m1 0h3m7 0h1m3 0h2m3 0h1m1 0h2m-43 1h1m1 0h3m1 0h1m2 0h1m1 0h1m2 0h3m3 0h2m1 0h1m1 0h1m2 0h2m1 0h3m2 0h3m1 0h1m1 0h1m1 0h1m-45 1h1m5 0h1m1 0h2m2 0h1m1 0h1m4 0h1m5 0h3m2 0h2m3 0h2m1 0h1m2 0h4m-45 1h7m3 0h1m1 0h1m3 0h1m2 0h1m1 0h4m2 0h5m1 0h1m2 0h1m1 0h1m1 0h2"/>
+        </svg>
+    </div>
+    <p class="instrucao">Aponte a câmera do celular para o QR code</p>
+    <p class="endereco">davidcaetanor.github.io/map-habitar-santana/pesquisa</p>
+    <div class="servico">
+        <small>Problema no bairro?</small>
+        <strong>Ligue 156</strong>
+        <span>Prefeitura de São Paulo: buraco, calçada, iluminação, lixo, árvore. Também no aplicativo SP156.</span>
+    </div>
+    <p class="rodape">INTEGRA-HABITAR: Moradia Segura, Acessível e Sustentável. Ponto: T1-Voluntários</p>
+</section>
+<section class="cartaz">
+    <p class="selo">Projeto de extensão USJT</p>
+    <h1>Como é viver em Santana?</h1>
+    <p class="chamada">Conte como está a segurança, a acessibilidade e a sustentabilidade no bairro e na sua moradia.
+        Leva 3 minutos e é anônimo.</p>
+    <div class="qr">
+        <svg viewBox="0 0 53 53" class="segno">
+            <path fill="#fff" d="M0 0h53v53h-53z"/>
+            <path class="qrline" stroke="#000"
+                  d="M4 4.5h7m5 0h2m1 0h4m2 0h1m1 0h1m2 0h2m2 0h4m2 0h1m1 0h7m-45 1h1m5 0h1m1 0h5m3 0h3m2 0h5m6 0h1m2 0h1m2 0h1m5 0h1m-45 1h1m1 0h3m1 0h1m5 0h4m2 0h3m1 0h2m1 0h1m3 0h2m1 0h2m1 0h1m2 0h1m1 0h3m1 0h1m-45 1h1m1 0h3m1 0h1m1 0h1m2 0h2m1 0h1m4 0h1m2 0h1m1 0h1m1 0h4m1 0h3m1 0h2m1 0h1m1 0h3m1 0h1m-45 1h1m1 0h3m1 0h1m1 0h9m3 0h5m1 0h1m1 0h1m1 0h1m3 0h3m1 0h1m1 0h3m1 0h1m-45 1h1m5 0h1m2 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m3 0h1m3 0h2m8 0h1m5 0h1m-45 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-37 1h1m8 0h4m3 0h1m1 0h3m2 0h1m1 0h4m-36 1h1m1 0h4m1 0h3m1 0h1m6 0h7m2 0h1m1 0h2m5 0h2m1 0h2m1 0h1m-44 1h3m1 0h2m1 0h1m2 0h1m2 0h1m1 0h1m1 0h3m2 0h1m2 0h6m3 0h5m1 0h1m1 0h1m-43 1h7m1 0h2m2 0h3m4 0h1m1 0h4m2 0h3m2 0h1m1 0h1m1 0h2m3 0h1m2 0h1m-45 1h1m1 0h3m4 0h2m1 0h3m1 0h1m1 0h1m1 0h2m1 0h2m2 0h1m4 0h2m3 0h1m3 0h2m1 0h1m-45 1h4m2 0h2m2 0h2m1 0h1m1 0h2m1 0h2m2 0h1m3 0h1m1 0h1m2 0h2m1 0h2m1 0h2m1 0h2m1 0h2m-45 1h5m2 0h5m1 0h2m1 0h2m1 0h2m5 0h1m2 0h2m1 0h2m1 0h2m1 0h2m3 0h1m-43 1h1m2 0h8m2 0h4m5 0h1m2 0h2m1 0h1m1 0h1m1 0h1m3 0h2m2 0h2m-41 1h4m2 0h2m1 0h1m1 0h5m1 0h2m2 0h4m2 0h1m5 0h1m1 0h1m3 0h3m-44 1h1m1 0h7m2 0h1m2 0h2m1 0h1m7 0h2m3 0h5m2 0h1m1 0h1m4 0h1m-45 1h2m1 0h1m1 0h1m3 0h5m1 0h8m1 0h2m1 0h2m1 0h2m2 0h3m2 0h4m1 0h1m-44 1h1m4 0h4m3 0h3m1 0h2m3 0h2m1 0h1m1 0h1m1 0h1m3 0h1m3 0h1m1 0h3m2 0h1m-45 1h1m1 0h1m1 0h1m2 0h1m2 0h5m1 0h1m13 0h2m1 0h2m1 0h3m1 0h5m-43 1h1m1 0h6m3 0h1m1 0h1m1 0h2m1 0h9m7 0h5m-37 1h1m3 0h4m3 0h1m3 0h2m3 0h2m1 0h1m1 0h2m2 0h4m3 0h1m2 0h1m-44 1h2m2 0h1m1 0h1m1 0h1m2 0h3m1 0h3m1 0h2m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m2 0h3m1 0h1m1 0h5m-43 1h3m3 0h7m4 0h2m3 0h2m1 0h1m1 0h2m1 0h1m1 0h3m3 0h1m1 0h2m-41 1h6m1 0h1m3 0h1m3 0h7m3 0h1m1 0h1m1 0h1m1 0h1m1 0h5m2 0h1m-44 1h1m6 0h3m1 0h3m3 0h3m5 0h1m1 0h4m2 0h1m4 0h2m2 0h2m-44 1h4m2 0h1m1 0h3m3 0h2m3 0h5m2 0h1m2 0h1m2 0h1m3 0h1m4 0h2m-40 1h1m1 0h1m4 0h4m1 0h2m2 0h1m2 0h1m1 0h1m1 0h2m3 0h1m2 0h2m4 0h5m-44 1h3m2 0h1m1 0h3m5 0h1m2 0h1m1 0h2m7 0h3m2 0h1m1 0h1m1 0h3m1 0h2m-45 1h1m3 0h1m2 0h1m1 0h2m1 0h1m1 0h2m1 0h1m1 0h1m3 0h2m1 0h3m1 0h2m1 0h2m2 0h4m2 0h2m-45 1h2m2 0h3m5 0h1m2 0h1m3 0h3m2 0h1m3 0h1m2 0h3m3 0h2m1 0h2m2 0h1m-45 1h3m2 0h1m4 0h2m1 0h7m3 0h1m4 0h1m1 0h1m2 0h3m4 0h3m1 0h1m-45 1h2m2 0h3m1 0h2m1 0h1m3 0h2m1 0h3m1 0h1m1 0h2m2 0h4m2 0h1m1 0h1m6 0h1m-43 1h1m2 0h1m5 0h4m3 0h1m3 0h1m1 0h4m2 0h2m1 0h4m2 0h4m-38 1h1m1 0h1m1 0h1m2 0h3m3 0h8m1 0h2m1 0h1m1 0h2m1 0h1m1 0h3m3 0h3m-44 1h4m2 0h3m2 0h1m1 0h1m1 0h1m1 0h1m1 0h1m3 0h2m3 0h2m1 0h1m1 0h1m3 0h3m1 0h2m-44 1h1m2 0h2m1 0h1m1 0h3m1 0h1m2 0h2m3 0h5m3 0h3m1 0h2m1 0h6m3 0h1m-37 1h1m1 0h2m3 0h3m1 0h2m3 0h2m3 0h3m1 0h1m1 0h2m3 0h1m1 0h2m-44 1h7m2 0h1m1 0h5m1 0h4m1 0h1m1 0h2m2 0h1m3 0h2m1 0h2m1 0h1m1 0h2m-42 1h1m5 0h1m1 0h3m2 0h2m3 0h3m3 0h1m1 0h1m2 0h1m3 0h1m1 0h2m3 0h3m1 0h1m-45 1h1m1 0h3m1 0h1m1 0h1m2 0h1m1 0h1m1 0h2m3 0h5m1 0h1m3 0h1m1 0h1m1 0h1m1 0h6m1 0h2m-45 1h1m1 0h3m1 0h1m1 0h4m4 0h3m1 0h6m4 0h1m3 0h2m3 0h1m1 0h3m-44 1h1m1 0h3m1 0h1m4 0h1m2 0h1m1 0h3m1 0h2m1 0h1m1 0h2m1 0h2m1 0h3m2 0h3m1 0h1m1 0h1m1 0h1m-45 1h1m5 0h1m1 0h1m3 0h1m1 0h1m1 0h1m2 0h1m4 0h1m2 0h3m1 0h1m3 0h2m1 0h1m3 0h3m-45 1h7m5 0h1m3 0h1m1 0h2m1 0h2m5 0h2m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1"/>
+        </svg>
+    </div>
+    <p class="instrucao">Aponte a câmera do celular para o QR code</p>
+    <p class="endereco">davidcaetanor.github.io/map-habitar-santana/pesquisa</p>
+    <div class="servico">
+        <small>Problema no bairro?</small>
+        <strong>Ligue 156</strong>
+        <span>Prefeitura de São Paulo: buraco, calçada, iluminação, lixo, árvore. Também no aplicativo SP156.</span>
+    </div>
+    <p class="rodape">INTEGRA-HABITAR: Moradia Segura, Acessível e Sustentável. Ponto: T2-Moreira-de-barros</p>
+</section>
+<section class="cartaz">
+    <p class="selo">Projeto de extensão USJT</p>
+    <h1>Como é viver em Santana?</h1>
+    <p class="chamada">Conte como está a segurança, a acessibilidade e a sustentabilidade no bairro e na sua moradia.
+        Leva 3 minutos e é anônimo.</p>
+    <div class="qr">
+        <svg viewBox="0 0 53 53" class="segno">
+            <path fill="#fff" d="M0 0h53v53h-53z"/>
+            <path class="qrline" stroke="#000"
+                  d="M4 4.5h7m5 0h2m1 0h2m2 0h1m1 0h1m1 0h1m2 0h1m1 0h1m1 0h4m2 0h1m1 0h7m-45 1h1m5 0h1m1 0h5m3 0h1m1 0h2m1 0h2m9 0h1m2 0h1m2 0h1m5 0h1m-45 1h1m1 0h3m1 0h1m5 0h4m1 0h1m4 0h2m1 0h1m3 0h2m2 0h1m1 0h1m2 0h1m1 0h3m1 0h1m-45 1h1m1 0h3m1 0h1m1 0h1m2 0h2m1 0h1m3 0h1m3 0h1m2 0h5m2 0h2m1 0h2m1 0h1m1 0h3m1 0h1m-45 1h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h5m1 0h1m1 0h1m1 0h3m1 0h3m1 0h1m1 0h3m1 0h1m-45 1h1m5 0h1m2 0h1m1 0h1m3 0h1m2 0h1m1 0h1m3 0h2m2 0h2m8 0h1m5 0h1m-45 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-37 1h1m2 0h1m2 0h1m2 0h2m1 0h1m3 0h1m1 0h3m2 0h1m1 0h4m-36 1h1m1 0h4m1 0h3m1 0h1m1 0h1m4 0h7m2 0h1m1 0h2m5 0h2m1 0h2m1 0h1m-44 1h1m1 0h3m2 0h2m1 0h2m1 0h1m1 0h1m1 0h4m1 0h1m1 0h9m1 0h5m1 0h1m1 0h1m-41 1h2m2 0h1m1 0h2m3 0h1m5 0h1m1 0h3m3 0h3m1 0h2m1 0h1m1 0h2m3 0h1m2 0h1m-44 1h1m1 0h2m3 0h5m3 0h1m1 0h1m1 0h2m2 0h1m2 0h1m4 0h1m1 0h1m2 0h1m3 0h2m1 0h1m-45 1h1m1 0h1m3 0h1m3 0h3m3 0h1m1 0h2m2 0h2m2 0h1m1 0h1m2 0h2m1 0h2m1 0h2m1 0h2m1 0h2m-42 1h2m5 0h1m3 0h2m1 0h1m1 0h2m2 0h1m2 0h1m2 0h2m1 0h1m2 0h2m1 0h3m2 0h1m-43 1h1m2 0h3m1 0h2m4 0h4m5 0h2m1 0h2m1 0h1m1 0h1m1 0h2m2 0h2m1 0h3m-40 1h3m1 0h2m2 0h7m1 0h2m5 0h1m2 0h1m5 0h1m1 0h1m3 0h3m-44 1h1m1 0h10m2 0h1m2 0h1m5 0h1m6 0h5m2 0h1m1 0h1m4 0h1m-45 1h2m1 0h1m1 0h1m1 0h2m1 0h4m1 0h6m3 0h2m1 0h2m1 0h2m2 0h3m2 0h2m3 0h1m-44 1h1m4 0h1m1 0h1m4 0h2m2 0h1m4 0h2m1 0h1m1 0h1m1 0h1m3 0h1m3 0h1m1 0h4m1 0h1m-45 1h1m1 0h1m1 0h1m2 0h1m1 0h1m1 0h5m1 0h1m4 0h1m6 0h1m1 0h1m1 0h2m1 0h3m1 0h1m1 0h2m-42 1h1m1 0h5m4 0h1m3 0h1m2 0h7m9 0h5m3 0h1m-41 1h1m3 0h1m2 0h1m6 0h3m3 0h2m3 0h1m3 0h4m3 0h1m-41 1h2m2 0h1m1 0h1m1 0h1m2 0h3m5 0h2m1 0h1m1 0h1m1 0h1m1 0h4m2 0h1m1 0h1m1 0h1m1 0h5m-43 1h3m3 0h7m1 0h2m1 0h2m3 0h1m4 0h2m1 0h1m1 0h3m3 0h1m1 0h2m-41 1h6m1 0h1m3 0h1m2 0h1m2 0h5m3 0h1m1 0h1m1 0h1m1 0h1m1 0h5m2 0h2m-45 1h1m6 0h3m1 0h3m4 0h1m1 0h3m2 0h3m1 0h2m2 0h1m4 0h2m2 0h2m-43 1h3m2 0h1m1 0h3m3 0h2m1 0h2m1 0h1m2 0h1m2 0h1m2 0h1m2 0h1m2 0h2m4 0h2m-43 1h1m2 0h1m1 0h1m4 0h7m2 0h2m1 0h1m1 0h1m1 0h2m4 0h1m1 0h2m4 0h5m-45 1h3m1 0h1m1 0h1m1 0h4m2 0h1m1 0h1m1 0h1m3 0h1m7 0h2m3 0h1m1 0h1m1 0h3m1 0h2m-45 1h1m1 0h1m1 0h2m1 0h1m1 0h4m1 0h2m2 0h2m3 0h2m1 0h3m1 0h1m1 0h3m2 0h4m2 0h2m-44 1h3m2 0h1m4 0h1m3 0h1m3 0h2m1 0h1m1 0h1m3 0h1m4 0h1m3 0h2m1 0h2m2 0h1m-43 1h1m1 0h1m5 0h1m1 0h2m1 0h4m1 0h1m2 0h1m4 0h1m1 0h1m2 0h3m4 0h3m1 0h1m-45 1h1m2 0h1m1 0h2m1 0h2m1 0h2m2 0h2m1 0h4m2 0h2m2 0h4m2 0h1m1 0h2m5 0h1m-44 1h1m2 0h1m1 0h1m4 0h1m6 0h1m2 0h2m1 0h4m2 0h2m1 0h4m1 0h5m-38 1h1m1 0h1m1 0h2m4 0h1m2 0h7m2 0h2m1 0h1m1 0h2m1 0h1m1 0h3m3 0h3m-44 1h4m2 0h4m3 0h1m1 0h1m1 0h1m1 0h1m3 0h2m3 0h2m1 0h1m1 0h1m3 0h3m1 0h2m-44 1h1m2 0h2m1 0h2m2 0h3m1 0h2m4 0h5m3 0h3m1 0h9m3 0h1m-37 1h1m2 0h2m4 0h1m1 0h2m3 0h2m3 0h3m3 0h2m3 0h1m1 0h2m-44 1h7m3 0h1m2 0h8m1 0h1m1 0h2m2 0h1m3 0h5m1 0h1m1 0h2m-42 1h1m5 0h1m1 0h1m1 0h1m1 0h5m1 0h3m3 0h1m5 0h1m2 0h1m1 0h2m3 0h3m1 0h1m-45 1h1m1 0h3m1 0h1m1 0h4m1 0h1m2 0h1m3 0h5m1 0h1m3 0h1m1 0h1m1 0h1m1 0h6m1 0h2m-45 1h1m1 0h3m1 0h1m1 0h1m2 0h1m3 0h4m1 0h3m7 0h1m3 0h2m3 0h1m-40 1h1m1 0h3m1 0h1m2 0h1m1 0h1m2 0h5m1 0h2m1 0h1m1 0h1m2 0h2m1 0h3m2 0h3m1 0h1m1 0h1m1 0h1m-45 1h1m5 0h1m1 0h2m2 0h1m1 0h1m2 0h3m3 0h5m2 0h2m3 0h2m1 0h1m2 0h4m-45 1h7m3 0h1m1 0h1m2 0h1m2 0h2m1 0h3m3 0h5m1 0h1m2 0h1m1 0h1m1 0h1"/>
+        </svg>
+    </div>
+    <p class="instrucao">Aponte a câmera do celular para o QR code</p>
+    <p class="endereco">davidcaetanor.github.io/map-habitar-santana/pesquisa</p>
+    <div class="servico">
+        <small>Problema no bairro?</small>
+        <strong>Ligue 156</strong>
+        <span>Prefeitura de São Paulo: buraco, calçada, iluminação, lixo, árvore. Também no aplicativo SP156.</span>
+    </div>
+    <p class="rodape">INTEGRA-HABITAR: Moradia Segura, Acessível e Sustentável. Ponto: T5-Amaral-Gama</p>
+</section>
+<section class="cartaz">
+    <p class="selo">Projeto de extensão USJT</p>
+    <h1>Como é viver em Santana?</h1>
+    <p class="chamada">Conte como está a segurança, a acessibilidade e a sustentabilidade no bairro e na sua moradia.
+        Leva 3 minutos e é anônimo.</p>
+    <div class="qr">
+        <svg viewBox="0 0 53 53" class="segno">
+            <path fill="#fff" d="M0 0h53v53h-53z"/>
+            <path class="qrline" stroke="#000"
+                  d="M4 4.5h7m5 0h2m1 0h5m1 0h1m1 0h2m1 0h1m1 0h1m1 0h4m2 0h1m1 0h7m-45 1h1m5 0h1m1 0h6m2 0h1m4 0h2m1 0h1m2 0h2m3 0h1m2 0h1m2 0h1m5 0h1m-45 1h1m1 0h3m1 0h1m5 0h2m1 0h1m1 0h4m1 0h3m1 0h1m2 0h3m1 0h1m1 0h1m2 0h1m1 0h3m1 0h1m-45 1h1m1 0h3m1 0h1m1 0h1m2 0h2m4 0h1m1 0h1m2 0h1m4 0h3m1 0h1m1 0h1m1 0h2m1 0h1m1 0h3m1 0h1m-45 1h1m1 0h3m1 0h1m1 0h3m2 0h5m1 0h7m2 0h1m1 0h1m3 0h3m1 0h1m1 0h3m1 0h1m-45 1h1m5 0h1m2 0h1m1 0h2m2 0h1m2 0h1m1 0h1m3 0h1m3 0h2m1 0h2m5 0h1m5 0h1m-45 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-37 1h1m2 0h4m2 0h2m1 0h1m3 0h1m1 0h3m4 0h4m-36 1h1m1 0h4m1 0h4m1 0h2m4 0h7m2 0h1m1 0h1m6 0h2m1 0h2m1 0h1m-44 1h1m2 0h1m3 0h2m1 0h2m2 0h2m1 0h2m3 0h11m1 0h5m1 0h1m1 0h1m-43 1h1m4 0h2m2 0h1m4 0h1m4 0h1m1 0h3m3 0h3m1 0h2m1 0h1m1 0h2m3 0h1m2 0h1m-45 1h1m1 0h1m1 0h1m4 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h2m5 0h1m4 0h1m1 0h1m2 0h1m3 0h2m1 0h1m-43 1h2m2 0h2m3 0h1m2 0h2m2 0h2m2 0h1m3 0h1m1 0h1m2 0h5m1 0h2m1 0h2m1 0h2m-44 1h1m1 0h2m2 0h2m6 0h3m1 0h2m3 0h1m1 0h1m2 0h2m1 0h1m2 0h2m1 0h2m3 0h1m-43 1h6m3 0h3m1 0h4m6 0h1m1 0h2m1 0h1m1 0h1m1 0h2m2 0h6m-41 1h1m1 0h2m1 0h3m1 0h7m1 0h2m3 0h1m1 0h1m2 0h2m4 0h1m1 0h1m3 0h3m-44 1h1m1 0h5m3 0h2m2 0h1m2 0h1m5 0h3m3 0h6m2 0h1m1 0h1m4 0h1m-45 1h2m1 0h1m1 0h1m1 0h1m1 0h1m1 0h3m1 0h7m2 0h2m1 0h2m1 0h2m2 0h3m2 0h2m3 0h1m-44 1h1m4 0h3m1 0h1m2 0h2m3 0h1m2 0h3m1 0h1m1 0h1m5 0h1m3 0h1m1 0h3m2 0h1m-45 1h1m1 0h1m1 0h1m2 0h1m1 0h1m1 0h5m2 0h1m2 0h1m3 0h3m2 0h2m1 0h2m1 0h3m1 0h3m1 0h1m-43 1h1m1 0h7m2 0h1m2 0h3m1 0h5m2 0h4m5 0h6m2 0h1m-41 1h1m3 0h1m1 0h2m5 0h4m3 0h1m1 0h3m1 0h1m2 0h2m1 0h1m3 0h1m-41 1h2m2 0h1m1 0h1m1 0h1m2 0h3m1 0h1m1 0h4m1 0h1m1 0h4m2 0h2m2 0h3m1 0h1m1 0h5m-43 1h3m3 0h9m2 0h2m3 0h1m1 0h1m2 0h2m1 0h1m1 0h3m3 0h1m1 0h2m-41 1h6m1 0h1m3 0h1m3 0h1m1 0h5m1 0h3m1 0h1m1 0h1m1 0h1m1 0h5m2 0h2m-45 1h1m6 0h3m1 0h3m3 0h3m2 0h1m4 0h4m2 0h1m2 0h1m1 0h2m2 0h2m-44 1h4m2 0h1m1 0h3m2 0h3m4 0h2m1 0h1m5 0h1m2 0h1m3 0h1m4 0h2m-40 1h1m1 0h1m4 0h4m1 0h3m1 0h1m1 0h2m1 0h1m1 0h2m3 0h2m1 0h2m4 0h5m-45 1h1m4 0h2m1 0h7m1 0h2m2 0h1m1 0h1m7 0h1m1 0h1m2 0h1m1 0h1m1 0h3m1 0h2m-45 1h1m2 0h3m1 0h1m1 0h2m4 0h1m2 0h7m1 0h3m1 0h2m1 0h2m2 0h4m2 0h2m-42 1h1m1 0h2m8 0h1m3 0h4m1 0h1m3 0h1m2 0h3m3 0h2m1 0h2m2 0h1m-45 1h6m4 0h4m1 0h5m3 0h1m4 0h1m1 0h2m1 0h3m4 0h3m1 0h1m-45 1h1m1 0h2m2 0h1m1 0h2m1 0h2m2 0h2m1 0h1m1 0h2m2 0h2m2 0h3m3 0h1m1 0h1m1 0h1m4 0h1m-44 1h2m1 0h3m4 0h1m3 0h1m2 0h1m2 0h1m1 0h5m2 0h7m3 0h3m-38 1h1m1 0h1m1 0h1m4 0h2m2 0h6m3 0h2m1 0h1m1 0h1m1 0h2m1 0h3m3 0h3m-44 1h4m2 0h3m6 0h1m1 0h1m4 0h1m1 0h1m3 0h2m1 0h2m4 0h3m1 0h2m-44 1h1m2 0h2m1 0h1m1 0h6m1 0h1m3 0h6m3 0h3m1 0h2m1 0h6m3 0h1m-37 1h1m1 0h3m2 0h3m1 0h2m3 0h2m3 0h3m1 0h4m3 0h1m1 0h2m-44 1h7m3 0h1m1 0h4m1 0h4m1 0h1m1 0h2m2 0h1m3 0h5m1 0h1m1 0h2m-42 1h1m5 0h1m1 0h1m1 0h1m1 0h3m3 0h3m3 0h2m4 0h1m2 0h1m1 0h2m3 0h3m1 0h1m-45 1h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m6 0h5m1 0h1m2 0h1m2 0h1m1 0h1m1 0h6m1 0h2m-45 1h1m1 0h3m1 0h1m1 0h2m1 0h1m4 0h3m1 0h5m5 0h1m3 0h2m3 0h1m2 0h1m-43 1h1m1 0h3m1 0h1m2 0h1m1 0h1m2 0h1m2 0h1m2 0h2m1 0h2m3 0h2m1 0h3m2 0h3m1 0h3m1 0h1m-45 1h1m5 0h1m1 0h2m2 0h1m1 0h2m1 0h3m3 0h3m3 0h1m1 0h1m3 0h2m1 0h1m2 0h4m-45 1h7m5 0h1m2 0h1m1 0h1m1 0h1m1 0h4m1 0h1m4 0h1m1 0h1m2 0h1m1 0h1m1 0h1"/>
+        </svg>
+    </div>
+    <p class="instrucao">Aponte a câmera do celular para o QR code</p>
+    <p class="endereco">davidcaetanor.github.io/map-habitar-santana/pesquisa</p>
+    <div class="servico">
+        <small>Problema no bairro?</small>
+        <strong>Ligue 156</strong>
+        <span>Prefeitura de São Paulo: buraco, calçada, iluminação, lixo, árvore. Também no aplicativo SP156.</span>
+    </div>
+    <p class="rodape">INTEGRA-HABITAR: Moradia Segura, Acessível e Sustentável. Ponto: Metro Santana</p>
+</section>
+<section class="cartaz">
+    <p class="selo">Projeto de extensão USJT</p>
+    <h1>Como é viver em Santana?</h1>
+    <p class="chamada">Conte como está a segurança, a acessibilidade e a sustentabilidade no bairro e na sua moradia.
+        Leva 3 minutos e é anônimo.</p>
+    <div class="qr">
+        <svg viewBox="0 0 49 49" class="segno">
+            <path fill="#fff" d="M0 0h49v49h-49z"/>
+            <path class="qrline" stroke="#000"
+                  d="M4 4.5h7m2 0h2m1 0h4m4 0h1m1 0h2m6 0h3m1 0h7m-41 1h1m5 0h1m1 0h2m4 0h1m6 0h2m1 0h1m1 0h1m1 0h1m1 0h1m3 0h1m5 0h1m-41 1h1m1 0h3m1 0h1m1 0h1m2 0h4m3 0h1m2 0h6m1 0h1m1 0h2m2 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h1m1 0h4m1 0h12m1 0h1m4 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m3 0h1m1 0h2m2 0h4m2 0h1m4 0h3m1 0h1m2 0h1m1 0h3m1 0h1m-41 1h1m5 0h1m5 0h1m3 0h1m1 0h2m10 0h3m1 0h1m5 0h1m-41 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-32 1h1m2 0h5m3 0h2m1 0h2m2 0h3m-29 1h3m1 0h2m3 0h1m3 0h1m1 0h1m1 0h2m4 0h1m1 0h6m6 0h2m-37 1h3m1 0h1m1 0h1m3 0h1m1 0h1m2 0h1m2 0h1m1 0h1m1 0h1m2 0h1m1 0h3m1 0h3m1 0h3m-41 1h1m3 0h1m1 0h1m2 0h2m2 0h1m1 0h1m2 0h7m8 0h2m3 0h2m-39 1h2m2 0h1m2 0h2m1 0h2m4 0h1m1 0h3m2 0h3m5 0h2m5 0h2m-41 1h4m2 0h4m1 0h1m2 0h3m5 0h6m1 0h5m3 0h2m-38 1h1m2 0h1m4 0h1m6 0h2m1 0h1m3 0h6m2 0h1m1 0h2m2 0h1m2 0h1m-41 1h1m1 0h2m2 0h1m2 0h2m1 0h1m1 0h1m2 0h1m1 0h5m2 0h1m2 0h4m1 0h3m1 0h3m-40 1h2m1 0h1m3 0h5m1 0h6m1 0h3m2 0h1m3 0h1m1 0h1m1 0h4m-34 1h8m4 0h1m1 0h2m4 0h2m4 0h3m3 0h2m-36 1h1m1 0h2m2 0h1m1 0h1m1 0h1m1 0h2m1 0h1m2 0h1m2 0h5m1 0h2m1 0h2m1 0h1m1 0h1m-37 1h7m2 0h2m1 0h2m2 0h1m9 0h1m2 0h1m1 0h3m1 0h1m1 0h1m-37 1h2m1 0h1m1 0h1m4 0h3m1 0h2m1 0h2m1 0h1m3 0h4m1 0h3m1 0h1m1 0h2m1 0h1m-41 1h4m2 0h1m8 0h2m1 0h3m5 0h9m1 0h4m-39 1h1m1 0h2m2 0h1m1 0h1m2 0h1m4 0h1m2 0h4m2 0h1m3 0h3m1 0h1m1 0h1m1 0h3m-40 1h4m1 0h2m1 0h2m1 0h1m1 0h1m1 0h3m1 0h2m1 0h2m1 0h1m1 0h2m2 0h1m4 0h3m-39 1h1m1 0h3m2 0h3m1 0h4m1 0h1m1 0h1m1 0h2m1 0h4m2 0h2m8 0h1m-41 1h1m2 0h1m1 0h7m1 0h1m1 0h3m1 0h3m1 0h4m2 0h1m1 0h1m1 0h1m3 0h4m-41 1h3m1 0h1m2 0h1m2 0h5m1 0h1m3 0h3m1 0h1m1 0h3m1 0h3m1 0h1m2 0h4m-41 1h1m5 0h2m1 0h1m1 0h2m5 0h2m1 0h2m2 0h1m3 0h5m3 0h1m1 0h2m-41 1h1m1 0h1m1 0h2m1 0h1m2 0h2m2 0h2m3 0h4m3 0h2m2 0h3m1 0h4m-38 1h1m5 0h1m1 0h4m1 0h1m1 0h1m2 0h1m1 0h4m1 0h1m1 0h2m1 0h2m1 0h1m1 0h3m-37 1h2m2 0h1m4 0h1m3 0h1m1 0h1m1 0h3m1 0h1m2 0h3m7 0h1m1 0h1m-38 1h1m5 0h3m1 0h2m4 0h1m3 0h1m3 0h1m2 0h1m4 0h3m3 0h1m-37 1h1m1 0h1m2 0h3m3 0h2m4 0h1m1 0h3m2 0h1m1 0h2m1 0h1m2 0h1m1 0h1m1 0h1m-38 1h1m2 0h1m1 0h2m1 0h1m1 0h1m2 0h1m1 0h3m5 0h1m1 0h1m1 0h3m1 0h7m-31 1h4m3 0h1m2 0h1m4 0h1m4 0h1m1 0h3m3 0h1m1 0h3m-41 1h7m5 0h3m1 0h5m1 0h3m1 0h1m1 0h2m1 0h2m1 0h1m1 0h4m-40 1h1m5 0h1m1 0h6m2 0h1m2 0h1m1 0h1m2 0h2m2 0h1m1 0h1m1 0h1m3 0h1m2 0h2m-41 1h1m1 0h3m1 0h1m6 0h1m1 0h1m2 0h1m1 0h1m3 0h1m2 0h1m1 0h1m2 0h8m-40 1h1m1 0h3m1 0h1m1 0h2m1 0h2m1 0h1m3 0h4m4 0h7m3 0h1m1 0h1m-39 1h1m1 0h3m1 0h1m1 0h3m1 0h3m2 0h1m2 0h2m3 0h2m2 0h2m1 0h1m2 0h1m2 0h3m-41 1h1m5 0h1m1 0h4m1 0h1m1 0h1m4 0h1m3 0h1m1 0h2m2 0h1m1 0h1m3 0h2m1 0h1m-40 1h7m2 0h6m4 0h2m1 0h4m1 0h1m2 0h3m6 0h1"/>
+        </svg>
+    </div>
+    <p class="instrucao">Aponte a câmera do celular para o QR code</p>
+    <p class="endereco">davidcaetanor.github.io/map-habitar-santana/pesquisa</p>
+    <div class="servico">
+        <small>Problema no bairro?</small>
+        <strong>Ligue 156</strong>
+        <span>Prefeitura de São Paulo: buraco, calçada, iluminação, lixo, árvore. Também no aplicativo SP156.</span>
+    </div>
+    <p class="rodape">INTEGRA-HABITAR: Moradia Segura, Acessível e Sustentável. Ponto: Whatsapp</p>
+</section>
+</body>
+</html>

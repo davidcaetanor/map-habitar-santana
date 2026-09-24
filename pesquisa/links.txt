@@ -1,0 +1,12 @@
+cartaz usjt	https://davidcaetanor.github.io/map-habitar-santana/pesquisa/?o=usjt
+cartaz t1-voluntarios	https://davidcaetanor.github.io/map-habitar-santana/pesquisa/?o=t1-voluntarios
+cartaz t2-moreira-de-barros	https://davidcaetanor.github.io/map-habitar-santana/pesquisa/?o=t2-moreira-de-barros
+cartaz t5-amaral-gama	https://davidcaetanor.github.io/map-habitar-santana/pesquisa/?o=t5-amaral-gama
+cartaz metro-santana	https://davidcaetanor.github.io/map-habitar-santana/pesquisa/?o=metro-santana
+cartaz whatsapp	https://davidcaetanor.github.io/map-habitar-santana/pesquisa/?o=whatsapp
+entrevista david	https://davidcaetanor.github.io/map-habitar-santana/pesquisa/?o=entrevista&c=david
+entrevista beatriz	https://davidcaetanor.github.io/map-habitar-santana/pesquisa/?o=entrevista&c=beatriz
+entrevista tamara	https://davidcaetanor.github.io/map-habitar-santana/pesquisa/?o=entrevista&c=tamara
+entrevista caua	https://davidcaetanor.github.io/map-habitar-santana/pesquisa/?o=entrevista&c=caua
+entrevista melissa	https://davidcaetanor.github.io/map-habitar-santana/pesquisa/?o=entrevista&c=melissa
+entrevista gabrielle	https://davidcaetanor.github.io/map-habitar-santana/pesquisa/?o=entrevista&c=gabrielle

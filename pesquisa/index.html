@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Habitar Santana: pesquisa</title>
+<style>
+  :root { --fundo: #ffffff; --texto: #1a1a1a; --suave: #5c5c5c; --destaque: #1f6f5c; }
+  @media (prefers-color-scheme: dark) {
+    :root { --fundo: #14181a; --texto: #ececec; --suave: #a3a9ab; --destaque: #5fc0a6; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 16px;
+    background: var(--fundo);
+    color: var(--texto);
+    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 420px; text-align: center; }
+  h1 { margin: 0 0 8px; font-size: 1.5rem; }
+  p { margin: 0 0 16px; color: var(--suave); }
+  a.botao {
+    display: inline-block;
+    padding: 12px 20px;
+    border-radius: 8px;
+    background: var(--destaque);
+    color: #ffffff;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  @media (prefers-color-scheme: dark) { a.botao { color: #0d1211; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Habitar Santana</h1>
+  <p id="mensagem">Abrindo a pesquisa...</p>
+  <a id="link" class="botao" href="#" hidden>Abrir a pesquisa</a>
+  <noscript><p>Ative o JavaScript para abrir a pesquisa automaticamente.</p></noscript>
+</main>
+<script>
+const CONFIG = {
+  formUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScvKrUFNmrNzeoccVkkiYsjnQDZJKv6FLH0FBwmq3S6JIYPVA/viewform',
+  entryOrigem: '2011239886',
+  entryColetor: '389088585'
+};
+
+function limpar(valor) {
+  return (valor || '').toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 40);
+}
+
+function montarUrl(config, busca) {
+  const url = new URL(config.formUrl);
+  url.searchParams.set('usp', 'pp_url');
+  const params = new URLSearchParams(busca);
+  const origem = limpar(params.get('o'));
+  const coletor = limpar(params.get('c'));
+  if (origem && config.entryOrigem) {
+    url.searchParams.set('entry.' + config.entryOrigem, origem);
+  }
+  if (coletor && config.entryColetor) {
+    url.searchParams.set('entry.' + config.entryColetor, coletor);
+  }
+  return url.toString();
+}
+
+function iniciar() {
+  const mensagem = document.getElementById('mensagem');
+  const link = document.getElementById('link');
+  if (!CONFIG.formUrl) {
+    mensagem.textContent = 'A pesquisa ainda não está disponível. Tente novamente em alguns instantes.';
+    return;
+  }
+  const destino = montarUrl(CONFIG, window.location.search);
+  link.href = destino;
+  link.hidden = false;
+  window.location.replace(destino);
+}
+
+iniciar();
+</script>
+</body>
+</html>

@@ -7,3 +7,4 @@ Thumbs.db
 *LEIA.md
 apps-script/
 __pycache__/
+*.idea

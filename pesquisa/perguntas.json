@@ -1,0 +1,214 @@
+{
+  "titulo": "Habitar Santana: pesquisa com moradores",
+  "descricao": "Pesquisa de extensão da USJT, projeto INTEGRA-HABITAR: Moradia Segura, Acessível e Sustentável. Queremos entender como é viver, trabalhar e circular em Santana. A pesquisa é anônima e os dados são usados apenas no trabalho acadêmico.",
+  "confirmacao": "Obrigado pela participação! Para pedir reparos e serviços da cidade (buraco, calçada, iluminação, lixo, árvore), ligue 156, use o aplicativo SP156 ou acesse sp156.prefeitura.sp.gov.br.",
+  "bancos": {
+    "problemas": [
+      { "texto": "Pouca iluminação", "eixo": "seguranca" },
+      { "texto": "Insegurança ou assaltos", "eixo": "seguranca" },
+      { "texto": "Alagamento ou drenagem ruim", "eixo": "seguranca" },
+      { "texto": "Piso quebrado ou irregular", "eixo": "acessibilidade" },
+      { "texto": "Falta de rampa", "eixo": "acessibilidade" },
+      { "texto": "Falta de piso tátil", "eixo": "acessibilidade" },
+      { "texto": "Calçada estreita", "eixo": "acessibilidade" },
+      { "texto": "Carro estacionado na calçada", "eixo": "acessibilidade" },
+      { "texto": "Poste ou obstáculo no caminho", "eixo": "acessibilidade" },
+      { "texto": "Raiz de árvore quebrando o piso", "eixo": "acessibilidade" },
+      {
+        "texto": "Falta de transporte ou ponto de ônibus",
+        "eixo": "acessibilidade"
+      },
+      { "texto": "Lixo ou entulho", "eixo": "sustentabilidade" },
+      { "texto": "Falta de lixeiras", "eixo": "sustentabilidade" },
+      { "texto": "Pouca sombra ou arborização", "eixo": "sustentabilidade" },
+      { "texto": "Calor excessivo", "eixo": "sustentabilidade" }
+    ]
+  },
+  "perguntas": [
+    {
+      "id": "faixa_etaria",
+      "tipo": "unica",
+      "titulo": "Qual sua faixa etária?",
+      "obrigatoria": true,
+      "secao": { "titulo": "Sobre você", "estilo": "cabecalho" },
+      "opcoes": [
+        { "texto": "Até 17 anos" },
+        { "texto": "18 a 29 anos" },
+        { "texto": "30 a 59 anos" },
+        { "texto": "60 anos ou mais" }
+      ]
+    },
+    {
+      "id": "convivio_mobilidade",
+      "tipo": "unica",
+      "titulo": "Alguém da sua casa ou do seu convívio tem dificuldade para andar (idoso, cadeirante, gestante, criança de colo ou carrinho)?",
+      "obrigatoria": true,
+      "opcoes": [
+        { "texto": "Sim" },
+        { "texto": "Não" },
+        { "texto": "Prefiro não dizer" }
+      ]
+    },
+    {
+      "id": "ocupacao",
+      "tipo": "unica",
+      "titulo": "Qual sua principal ocupação?",
+      "obrigatoria": false,
+      "outro": true,
+      "opcoes": [
+        { "texto": "Desempregado(a)" },
+        { "texto": "Autônomo(a)" },
+        { "texto": "Trabalhador(a) informal" },
+        { "texto": "Trabalhador(a) formal" },
+        { "texto": "Aposentado(a)" },
+        { "texto": "Estudante" }
+      ]
+    },
+    {
+      "id": "vinculo",
+      "tipo": "multipla",
+      "titulo": "Qual é a sua relação com Santana?",
+      "obrigatoria": true,
+      "opcoes": [
+        { "texto": "Moro em Santana" },
+        { "texto": "Trabalho em Santana" },
+        { "texto": "Estudo em Santana" },
+        { "texto": "Apenas circulo pelo bairro" }
+      ]
+    },
+    {
+      "id": "trecho",
+      "tipo": "unica",
+      "titulo": "Qual destes trechos você mais frequenta, seja para morar, trabalhar ou circular?",
+      "obrigatoria": true,
+      "outro": true,
+      "secao": { "titulo": "Sobre o bairro", "estilo": "pagina" },
+      "opcoes": [
+        {
+          "texto": "Rua Voluntários da Pátria (em frente à USJT)",
+          "rota": "T1"
+        },
+        { "texto": "Rua Conselheiro Moreira de Barros", "rota": "T2" },
+        { "texto": "Rua Amaral Gama", "rota": "T5" }
+      ]
+    },
+    {
+      "id": "notas_eixos",
+      "tipo": "grade",
+      "titulo": "Que nota você dá para esse trecho em cada aspecto?",
+      "descricao": "1 é muito ruim e 5 é muito bom.",
+      "obrigatoria": true,
+      "colunas": ["1", "2", "3", "4", "5"],
+      "linhas": [
+        {
+          "texto": "Segurança (iluminação, sensação de segurança, alagamento)",
+          "eixo": "seguranca"
+        },
+        {
+          "texto": "Acessibilidade (calçada, rampas, travessias, transporte)",
+          "eixo": "acessibilidade"
+        },
+        {
+          "texto": "Sustentabilidade (limpeza, sombra, arborização, lixeiras)",
+          "eixo": "sustentabilidade"
+        }
+      ]
+    },
+    {
+      "id": "problemas",
+      "tipo": "multipla",
+      "titulo": "Quais problemas você mais enfrenta nesse trecho?",
+      "descricao": "Marque quantos quiser.",
+      "obrigatoria": true,
+      "outro": true,
+      "opcoes": "@problemas"
+    },
+    {
+      "id": "deixou_de_sair",
+      "tipo": "unica",
+      "titulo": "Você já deixou de sair ou mudou de caminho por causa das condições do bairro (calçada, iluminação, insegurança, alagamento etc.)?",
+      "obrigatoria": true,
+      "opcoes": [
+        { "texto": "Sim" },
+        { "texto": "Às vezes" },
+        { "texto": "Não" }
+      ]
+    },
+    {
+      "id": "envelhecer",
+      "tipo": "escala",
+      "titulo": "Você acha que Santana é um bom bairro para envelhecer?",
+      "obrigatoria": true,
+      "escala": {
+        "min": 1,
+        "max": 5,
+        "rotulo_min": "Nada bom",
+        "rotulo_max": "Muito bom"
+      }
+    },
+    {
+      "id": "moradia_atende",
+      "tipo": "escala",
+      "titulo": "Sua moradia atual atende bem a quem mora nela (espaço, acesso, segurança, conservação)?",
+      "descricao": "Se você não mora em Santana, pode pular esta pergunta.",
+      "obrigatoria": false,
+      "eixo": "moradia",
+      "escala": {
+        "min": 1,
+        "max": 5,
+        "rotulo_min": "Não atende",
+        "rotulo_max": "Atende muito bem"
+      }
+    },
+    {
+      "id": "conhece_156",
+      "tipo": "unica",
+      "titulo": "Você sabe de quem é o número 156?",
+      "obrigatoria": true,
+      "secao": { "titulo": "Serviços da cidade", "estilo": "pagina" },
+      "opcoes": [
+        { "texto": "Não, nunca tinha ouvido falar", "nivel": 0 },
+        {
+          "texto": "É familiar, mas não sei de quem é nem para que serve",
+          "nivel": 1
+        },
+        {
+          "texto": "Sei de quem é e para que serve, mas nunca usei",
+          "nivel": 2
+        },
+        { "texto": "Já usei e o problema foi resolvido", "nivel": 3 },
+        { "texto": "Já usei e o problema não foi resolvido", "nivel": 3 }
+      ]
+    },
+    {
+      "id": "mais_urgente",
+      "tipo": "unica",
+      "titulo": "Se pudesse mudar uma só coisa, qual seria a mais urgente?",
+      "obrigatoria": true,
+      "outro": true,
+      "secao": {
+        "titulo": "Você sabia?",
+        "descricao": "O 156 é o canal de atendimento da Prefeitura de São Paulo. Por ele você pede reparo de buraco, calçada, iluminação, poda de árvore, coleta de lixo e outros serviços, no total cerca de mil. Ligue 156, use o aplicativo SP156, o site sp156.prefeitura.sp.gov.br ou vá a uma Subprefeitura.",
+        "estilo": "pagina"
+      },
+      "opcoes": "@problemas"
+    },
+    {
+      "id": "origem",
+      "tipo": "texto",
+      "titulo": "Origem",
+      "descricao": "Uso da equipe. Se estiver em branco, pode enviar assim.",
+      "obrigatoria": false,
+      "tecnico": true,
+      "secao": { "titulo": "Uso da equipe", "estilo": "cabecalho" }
+    },
+    {
+      "id": "coletor",
+      "tipo": "texto",
+      "titulo": "Quem coletou",
+      "descricao": "Uso da equipe. Se estiver em branco, pode enviar assim.",
+      "obrigatoria": false,
+      "tecnico": true
+    }
+  ]
+}
