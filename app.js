@@ -391,6 +391,11 @@ function atualizaBotaoTema() {
   b.innerHTML = escuro ? ICONE_SOL : ICONE_LUA;
   const rotulo = escuro ? 'Mudar para modo claro' : 'Mudar para modo escuro';
   b.setAttribute('aria-label', rotulo); b.title = rotulo;
+  const forcado = document.documentElement.getAttribute('data-theme');
+  document.querySelectorAll('meta[name="theme-color"]').forEach(m => {
+    const padrao = m.media.indexOf('dark') >= 0 ? '#1b1f23' : '#f7f8f5';
+    m.content = forcado ? (forcado === 'dark' ? '#1b1f23' : '#f7f8f5') : padrao;
+  });
 }
 $('bTema').onclick = () => {
   const novo = temaAtual() === 'dark' ? 'light' : 'dark';

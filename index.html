@@ -6,10 +6,27 @@
       name="viewport"
       content="width=device-width,initial-scale=1,viewport-fit=cover"
     />
+    <meta name="color-scheme" content="light dark" />
+    <meta
+      name="theme-color"
+      content="#f7f8f5"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#1b1f23"
+      media="(prefers-color-scheme: dark)"
+    />
     <title>Mapa de Acessibilidade · Habitar Santana</title>
     <style>
       :root {
+        color-scheme: light dark;
+      }
+      :root[data-theme="light"] {
         color-scheme: light;
+      }
+      :root[data-theme="dark"] {
+        color-scheme: dark;
       }
       html,
       body {
