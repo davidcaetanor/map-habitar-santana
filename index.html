@@ -35,6 +35,12 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
     />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
     <style>
       :root {
         --bg: #e4e7e2;
@@ -239,8 +245,7 @@
       .chip:focus-visible,
       button:focus-visible,
       select:focus-visible,
-      textarea:focus-visible,
-      .pt:focus-visible {
+      textarea:focus-visible {
         outline: 2px solid var(--accent);
         outline-offset: 2px;
       }
@@ -284,15 +289,72 @@
       #mapa {
         display: block;
         width: 100%;
-        height: auto;
+        height: clamp(380px, 68vh, 760px);
         background: var(--surface-2);
         border-radius: 0 0 var(--r) var(--r);
       }
-      .pt {
-        cursor: pointer;
+      .leaflet-container {
+        font: inherit;
+        font-size: 12px;
       }
-      .pt circle.halo {
-        fill: transparent;
+      :root[data-theme="dark"] .leaflet-tile-pane {
+        filter: invert(1) hue-rotate(180deg) brightness(0.92) contrast(0.88)
+          saturate(0.85);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) .leaflet-tile-pane {
+          filter: invert(1) hue-rotate(180deg) brightness(0.92) contrast(0.88)
+            saturate(0.85);
+        }
+      }
+      .leaflet-bar {
+        border: 1px solid var(--line-strong);
+        box-shadow: var(--shadow);
+      }
+      .leaflet-bar a,
+      .leaflet-bar a:hover {
+        background: var(--surface);
+        color: var(--ink);
+        border-bottom-color: var(--line);
+      }
+      .leaflet-bar a:hover {
+        background: var(--surface-2);
+      }
+      .leaflet-container .leaflet-control-attribution {
+        background: color-mix(in srgb, var(--surface) 82%, transparent);
+        color: var(--muted);
+      }
+      .leaflet-container .leaflet-control-attribution a {
+        color: var(--ink);
+      }
+      .leaflet-control-scale-line {
+        background: color-mix(in srgb, var(--surface) 82%, transparent);
+        color: var(--ink);
+        border-color: var(--line-strong);
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+      }
+      .leaflet-tooltip.rotulo-id,
+      .leaflet-tooltip.rotulo-marco {
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        padding: 0;
+        color: var(--ink);
+        white-space: nowrap;
+        text-shadow:
+          0 0 3px var(--surface),
+          0 0 3px var(--surface),
+          0 0 6px var(--surface);
+      }
+      .leaflet-tooltip.rotulo-id::before,
+      .leaflet-tooltip.rotulo-marco::before {
+        display: none;
+      }
+      .leaflet-tooltip.rotulo-id {
+        font: 500 14px "IBM Plex Mono", ui-monospace, monospace;
+      }
+      .leaflet-tooltip.rotulo-marco {
+        font: 600 13px Archivo, system-ui, sans-serif;
       }
       .leg-box {
         padding: 12px 14px;
@@ -323,15 +385,6 @@
       }
       .marco.sel circle {
         fill: var(--accent);
-      }
-      .pt:hover circle.mk,
-      .pt.sel circle.mk {
-        stroke: var(--ink);
-        stroke-width: 2.4;
-      }
-      .pt.sel circle.halo {
-        fill: var(--accent);
-        opacity: 0.28;
       }
       .leg-note {
         padding: 9px 14px;
@@ -681,17 +734,16 @@
               id="coordBox"
             ></span>
           </div>
-          <svg
+          <div
             id="mapa"
-            viewBox="0 0 1000 1000"
-            role="img"
+            role="region"
             aria-label="Mapa dos pontos fotografados"
-          ></svg>
+          ></div>
           <p class="leg-note">
             Cada ponto é uma fotografia, posicionada pela coordenada GPS gravada
-            no arquivo. A linha cheia liga os registros em ordem de horário e
-            reconstitui o caminho percorrido. Fotos tiradas no mesmo ponto
-            recebem um deslocamento visual mínimo para não se sobreporem.
+            no arquivo sobre o mapa do OpenStreetMap. Fotos
+            quase no mesmo lugar são afastadas para não se sobreporem, a
+            coordenada exibida no painel a original da foto.
           </p>
         </section>
 
@@ -795,6 +847,11 @@
       </footer>
     </div>
 
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
     <script src="app.js"></script>
   </body>
 </html>

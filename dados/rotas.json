@@ -35,15 +35,30 @@
   ],
   "tracado": [
    [
-    -23.496619,
-    -46.625267
+    -23.497136,
+    -46.625889
    ],
    [
-    -23.498871,
-    -46.626969
+    -23.4975077,
+    -46.6258357
+   ],
+   [
+    -23.498985,
+    -46.6256245
    ]
   ],
-  "tracadoNota": "Traçado de referência da Voluntários da Pátria, deduzido do endereço do campus e da esquina com a T2. Sem registro fotográfico."
+  "tracadoNota": "Voluntários da Pátria, do campus até a esquina com a Conselheiro Saraiva, onde chega a T5. Sem registro fotográfico ainda.",
+  "ruas": [
+   "Rua Voluntários da Pátria"
+  ],
+  "inicio": [
+   -23.497136,
+   -46.625889
+  ],
+  "fim": [
+   -23.498985,
+   -46.6256245
+  ]
  },
  {
   "codigo": "T2",
@@ -86,6 +101,17 @@
     "Acessibilidade",
     "Sem piso tátil direcional ou de alerta; sem rebaixamento de guia e sem rampas."
    ]
+  ],
+  "ruas": [
+   "Rua Conselheiro Moreira de Barros"
+  ],
+  "inicio": [
+   -23.4975077,
+   -46.6258357
+  ],
+  "fim": [
+   -23.4970902,
+   -46.6273545
   ]
  },
  {
@@ -129,6 +155,18 @@
     "Acessibilidade",
     "Sem piso tátil direcional ou de alerta; sem rebaixamento de guia e sem rampas."
    ]
+  ],
+  "ruas": [
+   "Rua Amaral Gama",
+   "Rua Conselheiro Saraiva"
+  ],
+  "inicio": [
+   -23.4970902,
+   -46.6273545
+  ],
+  "fim": [
+   -23.498985,
+   -46.6256245
   ]
  }
 ]
