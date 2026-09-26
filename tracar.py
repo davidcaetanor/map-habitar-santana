@@ -1,112 +1,137 @@
 #!/usr/bin/env python3
 """Gera dados/tracados.json (trajeto de cada rota no eixo das ruas do OpenStreetMap) e
 dados/ajustes.json."""
-import heapq, json, math, os, time, urllib.error, urllib.parse, urllib.request
-from ruas import CONTATO_APP, DADOS
+import heapq, json, math, time, urllib.error, urllib.parse, urllib.request
+from comum import CONTATO_APP, dado, grava_json, le_json
 
-OVERPASS = 'https://overpass-api.de/api/interpreter'
-CACHE_OSM = os.path.join(DADOS, 'cache-osm.json')
-SAIDA = os.path.join(DADOS, 'tracados.json')
-SAIDA_AJUSTES = os.path.join(DADOS, 'ajustes.json')
+SAIDA = dado('tracados.json')
+SAIDA_AJUSTES = dado('ajustes.json')
+METROS_POR_GRAU = 111320.0
 MARGEM_RUAS_M = 120
 MARGEM_EDIF_M = 60
 DISTANCIA_MAX_M = 80
 FOLGA_EDIF_M = 3.0
 SEPARACAO_M = 8.0
 RAIO_BUSCA_M = 35.0
+PASSO_M = 0.5
+ESPACO_CANDIDATOS_M = 0.75
+MIN_CANDIDATOS = 8
+FAIXA_MIN_RUA_M = 6.0
+DESVIO_MIN_M = 0.1
 DESLOCAMENTO_ALERTA_M = 25
 
 
-def carrega(caminho, padrao):
-    if os.path.isfile(caminho):
-        with open(caminho, encoding='utf-8') as f:
-            return json.load(f)
-    return padrao
+def media(valores):
+    return sum(valores) / len(valores)
 
 
 def caixa(pts, margem_m):
-    lat0 = sum(p[0] for p in pts) / len(pts)
-    mlat = margem_m / 111320.0
-    mlon = margem_m / (111320.0 * math.cos(math.radians(lat0)))
+    mlat = margem_m / METROS_POR_GRAU
+    mlon = margem_m / (METROS_POR_GRAU * math.cos(math.radians(media([p[0] for p in pts]))))
     return (min(p[0] for p in pts) - mlat, min(p[1] for p in pts) - mlon,
             max(p[0] for p in pts) + mlat, max(p[1] for p in pts) + mlon)
 
 
-def do_cache(cache, prefixo, bbox):
-    for chave, valor in cache.items():
-        nome, _, caixa_txt = chave.rpartition('|')
-        if nome != prefixo:
-            continue
-        s, w, n, e = (float(v) for v in caixa_txt.split(','))
-        if s <= bbox[0] and w <= bbox[1] and n >= bbox[2] and e >= bbox[3]:
-            return valor
-    return None
+def projecao(px, py, dx, dy):
+    t = 0.0 if dx == 0 and dy == 0 else max(0.0, min(1.0, (px * dx + py * dy) / (dx * dx + dy * dy)))
+    return t, math.hypot(px - t * dx, py - t * dy)
 
 
-def consulta_overpass(consulta):
-    corpo = urllib.parse.urlencode({'data': consulta}).encode()
-    for tentativa in range(4):
-        req = urllib.request.Request(OVERPASS, data=corpo, headers={'User-Agent': CONTATO_APP})
-        try:
-            with urllib.request.urlopen(req, timeout=90) as resp:
-                dados = json.loads(resp.read().decode('utf-8'))
-            time.sleep(2)
-            return dados
-        except urllib.error.HTTPError as erro:
-            if erro.code not in (429, 502, 503, 504) or tentativa == 3:
-                raise
-        except urllib.error.URLError:
-            if tentativa == 3:
-                raise
-        espera = 15 * (tentativa + 1)
-        print('  Overpass ocupado, nova tentativa em %d s' % espera)
-        time.sleep(espera)
+def geometria(elemento):
+    return [[g['lat'], g['lon']] for g in elemento['geometry']]
 
 
-def busca_ways(nome, bbox, cache):
-    guardado = do_cache(cache, nome, bbox)
-    if guardado is not None:
-        return guardado
-    consulta = '[out:json][timeout:25];way["highway"]["name"~"^%s$",i](%.6f,%.6f,%.6f,%.6f);out geom;' % (
-        nome.replace('"', '\\"'), bbox[0], bbox[1], bbox[2], bbox[3])
-    dados = consulta_overpass(consulta)
-    ways = [{'id': e['id'], 'nodes': e['nodes'], 'geom': [[g['lat'], g['lon']] for g in e['geometry']]}
-            for e in dados.get('elements', []) if e.get('type') == 'way' and 'geometry' in e]
-    cache['%s|%.4f,%.4f,%.4f,%.4f' % ((nome,) + tuple(bbox))] = ways
-    return ways
+class Overpass:
+    URL = 'https://overpass-api.de/api/interpreter'
+    CAMINHO_CACHE = dado('cache-osm.json')
+    TENTATIVAS = 4
+    CODIGOS_OCUPADO = (429, 502, 503, 504)
 
+    def __init__(self):
+        self.cache = le_json(self.CAMINHO_CACHE, {})
 
-def busca_edificios(bbox, cache):
-    guardado = do_cache(cache, 'edificios', bbox)
-    if guardado is not None:
-        return guardado
-    txt = '%.6f,%.6f,%.6f,%.6f' % tuple(bbox)
-    consulta = ('[out:json][timeout:60];(way["building"]["building"!="no"](%s);'
-                'relation["building"]["building"!="no"](%s););out geom;') % (txt, txt)
-    dados = consulta_overpass(consulta)
-    aneis = []
-    for e in dados.get('elements', []):
-        if e.get('type') == 'way' and 'geometry' in e:
-            aneis.append([[g['lat'], g['lon']] for g in e['geometry']])
-        elif e.get('type') == 'relation':
-            for m in e.get('members', []):
-                if m.get('role') == 'outer' and 'geometry' in m:
-                    aneis.append([[g['lat'], g['lon']] for g in m['geometry']])
-    cache['edificios|%.4f,%.4f,%.4f,%.4f' % tuple(bbox)] = aneis
-    return aneis
+    def salva(self):
+        grava_json(self.CAMINHO_CACHE, self.cache)
+
+    def ruas(self, nome, bbox):
+        consulta = '[out:json][timeout:25];way["highway"]["name"~"^%s$",i](%.6f,%.6f,%.6f,%.6f);out geom;' % (
+            (nome.replace('"', '\\"'),) + tuple(bbox))
+        return self._busca(nome, bbox, consulta, lambda dados: [
+            {'id': e['id'], 'nodes': e['nodes'], 'geom': geometria(e)}
+            for e in dados.get('elements', []) if e.get('type') == 'way' and 'geometry' in e])
+
+    def edificios(self, bbox):
+        txt = '%.6f,%.6f,%.6f,%.6f' % tuple(bbox)
+        consulta = ('[out:json][timeout:60];(way["building"]["building"!="no"](%s);'
+                    'relation["building"]["building"!="no"](%s););out geom;') % (txt, txt)
+        return self._busca('edificios', bbox, consulta, self._aneis)
+
+    @staticmethod
+    def _aneis(dados):
+        aneis = []
+        for e in dados.get('elements', []):
+            if e.get('type') == 'way' and 'geometry' in e:
+                aneis.append(geometria(e))
+            elif e.get('type') == 'relation':
+                aneis += [geometria(m) for m in e.get('members', []) if m.get('role') == 'outer' and 'geometry' in m]
+        return aneis
+
+    def _busca(self, prefixo, bbox, consulta, extrai):
+        guardado = self._guardado(prefixo, bbox)
+        if guardado is not None:
+            return guardado
+        valor = extrai(self._consulta(consulta))
+        self.cache['%s|%.4f,%.4f,%.4f,%.4f' % ((prefixo,) + tuple(bbox))] = valor
+        return valor
+
+    def _guardado(self, prefixo, bbox):
+        for chave, valor in self.cache.items():
+            nome, _, caixa_txt = chave.rpartition('|')
+            if nome != prefixo:
+                continue
+            s, w, n, e = (float(v) for v in caixa_txt.split(','))
+            if s <= bbox[0] and w <= bbox[1] and n >= bbox[2] and e >= bbox[3]:
+                return valor
+        return None
+
+    def _consulta(self, consulta):
+        corpo = urllib.parse.urlencode({'data': consulta}).encode()
+        for tentativa in range(self.TENTATIVAS):
+            ultima = tentativa == self.TENTATIVAS - 1
+            req = urllib.request.Request(self.URL, data=corpo, headers={'User-Agent': CONTATO_APP})
+            try:
+                with urllib.request.urlopen(req, timeout=90) as resp:
+                    dados = json.loads(resp.read().decode('utf-8'))
+                time.sleep(2)
+                return dados
+            except urllib.error.HTTPError as erro:
+                if erro.code not in self.CODIGOS_OCUPADO or ultima:
+                    raise
+            except urllib.error.URLError:
+                if ultima:
+                    raise
+            espera = 15 * (tentativa + 1)
+            print('  Overpass ocupado, nova tentativa em %d s' % espera)
+            time.sleep(espera)
 
 
 class Plano:
-    def __init__(self, lat0, lon0):
+    def __init__(self, lat0, lon0=0.0):
         self.lat0, self.lon0 = lat0, lon0
-        self.ky = 111320.0
-        self.kx = 111320.0 * math.cos(math.radians(lat0))
+        self.ky = METROS_POR_GRAU
+        self.kx = METROS_POR_GRAU * math.cos(math.radians(lat0))
 
     def xy(self, lat, lon):
         return (lon - self.lon0) * self.kx, (lat - self.lat0) * self.ky
 
     def latlon(self, x, y):
         return self.lat0 + y / self.ky, self.lon0 + x / self.kx
+
+    def delta(self, p, q):
+        return (q[1] - p[1]) * self.kx, (q[0] - p[0]) * self.ky
+
+    def dist(self, p, q):
+        return math.hypot(*self.delta(p, q))
 
 
 class Edificios:
@@ -121,9 +146,12 @@ class Edificios:
             xy = [plano.xy(lat, lon) for lat, lon in anel]
             xs, ys = [p[0] for p in xy], [p[1] for p in xy]
             pol = (min(xs), min(ys), max(xs), max(ys), xy)
-            for i in range(math.floor((pol[0] - borda) / self.CELULA), math.floor((pol[2] + borda) / self.CELULA) + 1):
-                for j in range(math.floor((pol[1] - borda) / self.CELULA), math.floor((pol[3] + borda) / self.CELULA) + 1):
+            for i in self._celulas(pol[0] - borda, pol[2] + borda):
+                for j in self._celulas(pol[1] - borda, pol[3] + borda):
                     self.grade.setdefault((i, j), []).append(pol)
+
+    def _celulas(self, inicio, fim):
+        return range(math.floor(inicio / self.CELULA), math.floor(fim / self.CELULA) + 1)
 
     def livre(self, x, y, folga=FOLGA_EDIF_M):
         for x0, y0, x1, y1, xy in self.grade.get((math.floor(x / self.CELULA), math.floor(y / self.CELULA)), ()):
@@ -131,46 +159,35 @@ class Edificios:
                 continue
             dentro = False
             menor = math.inf
-            for i in range(len(xy) - 1):
-                (ax, ay), (bx, by) = xy[i], xy[i + 1]
+            for (ax, ay), (bx, by) in zip(xy, xy[1:]):
                 if (ay > y) != (by > y) and x < (bx - ax) * (y - ay) / (by - ay) + ax:
                     dentro = not dentro
-                dx, dy = bx - ax, by - ay
-                t = 0.0 if dx == 0 and dy == 0 else max(0.0, min(1.0, ((x - ax) * dx + (y - ay) * dy) / (dx * dx + dy * dy)))
-                menor = min(menor, math.hypot(x - ax - t * dx, y - ay - t * dy))
+                menor = min(menor, projecao(x - ax, y - ay, bx - ax, by - ay)[1])
             if dentro or menor < folga:
                 return False
         return True
 
 
 class Rede:
-    def __init__(self, ways, lat0):
-        self.ky = 111320.0
-        self.kx = 111320.0 * math.cos(math.radians(lat0))
+    def __init__(self, ways, plano):
+        self.plano = plano
         self.coord, self.adj, self.seg, self.comp, self.ordem = {}, {}, {}, {}, {}
         for w in ways:
             self.ordem[w['id']] = []
-            for i in range(len(w['nodes']) - 1):
-                a, b = w['nodes'][i], w['nodes'][i + 1]
+            for i, (a, b) in enumerate(zip(w['nodes'], w['nodes'][1:])):
                 chave = (w['id'], i)
                 self.coord[a], self.coord[b] = w['geom'][i], w['geom'][i + 1]
                 self.seg[chave] = (a, b)
-                self.comp[chave] = self.dist(w['geom'][i], w['geom'][i + 1])
+                self.comp[chave] = plano.dist(w['geom'][i], w['geom'][i + 1])
                 self.adj.setdefault(a, []).append((b, self.comp[chave], chave))
                 self.adj.setdefault(b, []).append((a, self.comp[chave], chave))
                 self.ordem[w['id']].append(chave)
-
-    def dist(self, p, q):
-        return math.hypot((q[1] - p[1]) * self.kx, (q[0] - p[0]) * self.ky)
 
     def projeta(self, lat, lon):
         melhor = None
         for k, (a, b) in self.seg.items():
             pa, pb = self.coord[a], self.coord[b]
-            dx, dy = (pb[1] - pa[1]) * self.kx, (pb[0] - pa[0]) * self.ky
-            px, py = (lon - pa[1]) * self.kx, (lat - pa[0]) * self.ky
-            t = 0.0 if dx == 0 and dy == 0 else max(0.0, min(1.0, (px * dx + py * dy) / (dx * dx + dy * dy)))
-            d = math.hypot(px - t * dx, py - t * dy)
+            t, d = projecao(*self.plano.delta(pa, (lat, lon)), *self.plano.delta(pa, pb))
             if melhor is None or d < melhor[0]:
                 melhor = (d, k, t)
         return melhor
@@ -224,6 +241,16 @@ class Rede:
         p = [pa[0] + (pb[0] - pa[0]) * t, pa[1] + (pb[1] - pa[1]) * t]
         return [round(p[0], 6), round(p[1], 6)] if arredonda else p
 
+    @staticmethod
+    def _une(intervalos):
+        unidos = []
+        for t0, t1 in sorted(intervalos):
+            if unidos and t0 <= unidos[-1][1] + 1e-9:
+                unidos[-1][1] = max(unidos[-1][1], t1)
+            else:
+                unidos.append([t0, t1])
+        return unidos
+
     def polilinhas(self, cob):
         por_seg = {}
         for chave, t0, t1 in cob:
@@ -235,13 +262,7 @@ class Rede:
                 if chave not in por_seg:
                     atual = None
                     continue
-                unidos = []
-                for t0, t1 in sorted(por_seg[chave]):
-                    if unidos and t0 <= unidos[-1][1] + 1e-9:
-                        unidos[-1][1] = max(unidos[-1][1], t1)
-                    else:
-                        unidos.append([t0, t1])
-                for t0, t1 in unidos:
+                for t0, t1 in self._une(por_seg[chave]):
                     p0, p1 = self.ponto(chave, t0), self.ponto(chave, t1)
                     if atual and atual[-1] == p0:
                         atual.append(p1)
@@ -251,19 +272,17 @@ class Rede:
         return [l for l in linhas if len(l) > 1 and l[0] != l[-1]]
 
 
-def trata_rota(rota, pontos, cache):
-    cod = rota['codigo']
-    fotos = [[p['lat'], p['lon']] for p in pontos if p['t'] == cod]
-    seq = ([rota['inicio']] if rota.get('inicio') else []) + (fotos or rota.get('tracado') or []) + \
-          ([rota['fim']] if rota.get('fim') else [])
-    nomes = rota.get('ruas') or sorted({p.get('rua') for p in pontos if p['t'] == cod and p.get('rua')})
-    if len(seq) < 2 or not nomes:
-        return None, []
-    bbox = caixa(seq, MARGEM_RUAS_M)
+def sequencia_da_rota(rota, fotos):
+    inicio = [rota['inicio']] if rota.get('inicio') else []
+    fim = [rota['fim']] if rota.get('fim') else []
+    return inicio + (fotos or rota.get('tracado') or []) + fim
+
+
+def ways_das_ruas(nomes, bbox, overpass, cod):
     vistos = {}
     for nome in nomes:
         try:
-            ways = busca_ways(nome, bbox, cache)
+            ways = overpass.ruas(nome, bbox)
         except Exception as erro:
             print('  aviso: nao foi possivel buscar "%s" no Overpass - %s' % (nome, erro))
             continue
@@ -271,11 +290,10 @@ def trata_rota(rota, pontos, cache):
             print('  aviso: "%s" nao encontrada no OpenStreetMap perto de %s' % (nome, cod))
         for w in ways:
             vistos[w['id']] = w
-    ways = list(vistos.values())
-    if not ways:
-        print('  %s: sem ruas do OpenStreetMap, mantido o traçado de rotas.json' % cod)
-        return None, []
-    rede = Rede(ways, sum(p[0] for p in seq) / len(seq))
+    return list(vistos.values())
+
+
+def encaixes_da_sequencia(rede, seq, cod):
     encaixes = []
     for lat, lon in seq:
         s = rede.encaixa(lat, lon)
@@ -284,6 +302,10 @@ def trata_rota(rota, pontos, cache):
                 lat, lon, cod, DISTANCIA_MAX_M))
         elif not encaixes or encaixes[-1] != s:
             encaixes.append(s)
+    return encaixes
+
+
+def cobertura_dos_encaixes(rede, encaixes, cod):
     cob = []
     for a, b in zip(encaixes, encaixes[1:]):
         parte = rede.cobertura(a, b)
@@ -291,99 +313,128 @@ def trata_rota(rota, pontos, cache):
             print('  aviso: trecho sem ligacao no mapa entre dois pontos de %s, ignorado' % cod)
         else:
             cob += parte
-    linhas = rede.polilinhas(cob)
+    return cob
+
+
+def tracado_da_rota(rota, pontos, overpass):
+    cod = rota['codigo']
+    da_rota = [p for p in pontos if p['t'] == cod]
+    seq = sequencia_da_rota(rota, [[p['lat'], p['lon']] for p in da_rota])
+    nomes = rota.get('ruas') or sorted({p.get('rua') for p in da_rota if p.get('rua')})
+    if len(seq) < 2 or not nomes:
+        return None, []
+    ways = ways_das_ruas(nomes, caixa(seq, MARGEM_RUAS_M), overpass, cod)
+    if not ways:
+        print('  %s: sem ruas do OpenStreetMap, mantido o traçado de rotas.json' % cod)
+        return None, []
+    rede = Rede(ways, Plano(media([p[0] for p in seq])))
+    encaixes = encaixes_da_sequencia(rede, seq, cod)
+    linhas = rede.polilinhas(cobertura_dos_encaixes(rede, encaixes, cod))
     print('  %s: %d pontos encaixados, %d trechos de rua' % (cod, len(encaixes), len(linhas)))
     return linhas or None, ways
 
 
-def posiciona(pontos, ways, cache):
+class Posicionador:
+    def __init__(self, plano, predios, rede):
+        self.plano, self.predios, self.rede = plano, predios, rede
+        self.colocados = []
+
+    def dist_rua(self, x, y):
+        return self.rede.mais_proximo(*self.plano.latlon(x, y))[1]
+
+    def fora_de_edificio(self, lat, lon, x0, y0):
+        if self.predios.livre(x0, y0):
+            return x0, y0
+        alvo, d = self.rede.mais_proximo(lat, lon)
+        tx, ty = self.plano.xy(*alvo)
+        for i in range(1, int(d / PASSO_M) + 2):
+            s = min(i * PASSO_M, d) / d if d else 1
+            cx, cy = x0 + (tx - x0) * s, y0 + (ty - y0) * s
+            if self.predios.livre(cx, cy, FOLGA_EDIF_M + 0.2):
+                return cx, cy
+        return tx, ty
+
+    def candidatos(self, bx, by, r):
+        n = 1 if r == 0 else max(MIN_CANDIDATOS, int(2 * math.pi * r / ESPACO_CANDIDATOS_M))
+        for i in range(n):
+            a = 2 * math.pi * i / n
+            yield bx + r * math.cos(a), by + r * math.sin(a)
+
+    def aceitavel(self, cx, cy):
+        return (all(math.hypot(cx - qx, cy - qy) >= SEPARACAO_M for qx, qy in self.colocados)
+                and self.predios.livre(cx, cy))
+
+    def vaga_proxima(self, bx, by):
+        limite_rua = max(self.dist_rua(bx, by), FAIXA_MIN_RUA_M) + 0.5
+        r = 0.0
+        while r <= RAIO_BUSCA_M:
+            anel = []
+            for cx, cy in self.candidatos(bx, by, r):
+                if not self.aceitavel(cx, cy):
+                    continue
+                dr = self.dist_rua(cx, cy)
+                if dr <= limite_rua:
+                    anel.append((dr, cx, cy))
+            if anel:
+                return min(anel)[1:]
+            r += PASSO_M
+        return None
+
+    def posiciona(self, p):
+        x0, y0 = self.plano.xy(p['lat'], p['lon'])
+        base = self.fora_de_edificio(p['lat'], p['lon'], x0, y0)
+        escolhido = self.vaga_proxima(*base)
+        if escolhido is None:
+            print('  aviso: %s sem espaco livre por perto, mantido no lugar calculado' % p['id'])
+            escolhido = base
+        self.colocados.append(escolhido)
+        return escolhido, math.hypot(escolhido[0] - x0, escolhido[1] - y0)
+
+
+def ajustes_de_exibicao(pontos, ways, overpass):
     fotos = [p for p in pontos if 'lat' in p]
     if not fotos or not ways:
         return {}
     try:
-        aneis = busca_edificios(caixa([[p['lat'], p['lon']] for p in fotos], MARGEM_EDIF_M), cache)
+        aneis = overpass.edificios(caixa([[p['lat'], p['lon']] for p in fotos], MARGEM_EDIF_M))
     except Exception as erro:
         print('  aviso: nao foi possivel buscar edificios no Overpass - %s' % erro)
         return {}
-    lat0 = sum(p['lat'] for p in fotos) / len(fotos)
-    lon0 = sum(p['lon'] for p in fotos) / len(fotos)
-    plano = Plano(lat0, lon0)
-    predios = Edificios(aneis, plano)
-    rede = Rede(ways, lat0)
-
-    def dist_rua(x, y):
-        return rede.mais_proximo(*plano.latlon(x, y))[1]
-
-    colocados, ajustes, desvios = [], {}, []
+    plano = Plano(media([p['lat'] for p in fotos]), media([p['lon'] for p in fotos]))
+    posicionador = Posicionador(plano, Edificios(aneis, plano), Rede(ways, plano))
+    ajustes, desvios = {}, []
     for p in fotos:
-        x0, y0 = plano.xy(p['lat'], p['lon'])
-        bx, by = x0, y0
-        if not predios.livre(bx, by):
-            alvo, d = rede.mais_proximo(p['lat'], p['lon'])
-            tx, ty = plano.xy(*alvo)
-            passos = int(d / 0.5) + 1
-            for i in range(1, passos + 1):
-                s = min(i * 0.5, d) / d if d else 1
-                cx, cy = x0 + (tx - x0) * s, y0 + (ty - y0) * s
-                if predios.livre(cx, cy, FOLGA_EDIF_M + 0.2):
-                    bx, by = cx, cy
-                    break
-            else:
-                bx, by = tx, ty
-        limite_rua = max(dist_rua(bx, by), 6.0) + 0.5
-        escolhido = None
-        r = 0.0
-        while r <= RAIO_BUSCA_M and escolhido is None:
-            n = 1 if r == 0 else max(8, int(2 * math.pi * r / 0.75))
-            anel = []
-            for i in range(n):
-                a = 2 * math.pi * i / n
-                cx, cy = bx + r * math.cos(a), by + r * math.sin(a)
-                if any(math.hypot(cx - qx, cy - qy) < SEPARACAO_M for qx, qy in colocados):
-                    continue
-                if not predios.livre(cx, cy):
-                    continue
-                dr = dist_rua(cx, cy)
-                if dr <= limite_rua:
-                    anel.append((dr, cx, cy))
-            if anel:
-                _, cx, cy = min(anel)
-                escolhido = (cx, cy)
-            r += 0.5
-        if escolhido is None:
-            print('  aviso: %s sem espaco livre por perto, mantido no lugar calculado' % p['id'])
-            escolhido = (bx, by)
-        colocados.append(escolhido)
-        desvio = math.hypot(escolhido[0] - x0, escolhido[1] - y0)
-        if desvio > 0.1:
-            lat, lon = plano.latlon(*escolhido)
-            ajustes[p['id']] = [round(lat, 6), round(lon, 6)]
-            desvios.append(desvio)
-            if desvio > DESLOCAMENTO_ALERTA_M:
-                print('  aviso: %s deslocado %.0f m, confira no mapa' % (p['id'], desvio))
+        escolhido, desvio = posicionador.posiciona(p)
+        if desvio <= DESVIO_MIN_M:
+            continue
+        lat, lon = plano.latlon(*escolhido)
+        ajustes[p['id']] = [round(lat, 6), round(lon, 6)]
+        desvios.append(desvio)
+        if desvio > DESLOCAMENTO_ALERTA_M:
+            print('  aviso: %s deslocado %.0f m, confira no mapa' % (p['id'], desvio))
     if desvios:
         print('  fotos reposicionadas: %d de %d, desvio medio %.1f m, maximo %.1f m' % (
-            len(desvios), len(fotos), sum(desvios) / len(desvios), max(desvios)))
+            len(desvios), len(fotos), media(desvios), max(desvios)))
     return ajustes
 
 
-if __name__ == '__main__':
-    pontos = carrega(os.path.join(DADOS, 'pontos.json'), [])
-    rotas = carrega(os.path.join(DADOS, 'rotas.json'), [])
-    cache = carrega(CACHE_OSM, {})
-    saida, todas = {}, {}
+def main():
+    pontos = le_json(dado('pontos.json'), [])
+    rotas = le_json(dado('rotas.json'), [])
+    overpass = Overpass()
+    tracados, todas = {}, {}
     for rota in rotas:
-        linhas, ways = trata_rota(rota, pontos, cache)
-        for w in ways:
-            todas[w['id']] = w
+        linhas, ways = tracado_da_rota(rota, pontos, overpass)
+        todas.update((w['id'], w) for w in ways)
         if linhas:
-            saida[rota['codigo']] = linhas
-    ajustes = posiciona(pontos, list(todas.values()), cache)
-    with open(CACHE_OSM, 'w', encoding='utf-8') as f:
-        json.dump(cache, f, ensure_ascii=False, separators=(',', ':'))
-    with open(SAIDA, 'w', encoding='utf-8') as f:
-        json.dump(saida, f, separators=(',', ':'))
-    with open(SAIDA_AJUSTES, 'w', encoding='utf-8') as f:
-        json.dump(ajustes, f, separators=(',', ':'))
-    print('dados/tracados.json: %d rotas encaixadas' % len(saida))
+            tracados[rota['codigo']] = linhas
+    ajustes = ajustes_de_exibicao(pontos, list(todas.values()), overpass)
+    overpass.salva()
+    grava_json(SAIDA, tracados)
+    grava_json(SAIDA_AJUSTES, ajustes)
+    print('dados/tracados.json: %d rotas encaixadas' % len(tracados))
     print('dados/ajustes.json: %d fotos reposicionadas' % len(ajustes))
+
+
+if __name__ == '__main__':
+    main()

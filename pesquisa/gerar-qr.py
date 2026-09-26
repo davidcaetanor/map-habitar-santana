@@ -18,6 +18,8 @@ ORIGENS_PADRAO = [
 ]
 COLETORES_PADRAO = ["david", "beatriz", "tamara", "caua", "melissa", "gabrielle"]
 CODIGO_VALIDO = re.compile(r"^[a-z0-9_-]{1,40}$")
+CORRECAO_QR = "q"
+BORDA_QR = 4
 
 MODELO_CARTAZES = """<!doctype html>
 <html lang="pt-BR">
@@ -99,14 +101,26 @@ def validar_codigos(codigos, rotulo):
             )
 
 
-def salvar_qr(qr, nome, pasta_qr):
-    qr.save(str(pasta_qr / (nome + ".svg")), scale=10, border=4)
-    qr.save(str(pasta_qr / (nome + ".png")), scale=20, border=4)
+def qr_de(link):
+    return segno.make(link, error=CORRECAO_QR)
+
+
+def salvar_qr(link, nome, pasta_qr):
+    qr = qr_de(link)
+    qr.save(str(pasta_qr / (nome + ".svg")), scale=10, border=BORDA_QR)
+    qr.save(str(pasta_qr / (nome + ".png")), scale=20, border=BORDA_QR)
+
+
+def entradas(base, origens, coletores):
+    for origem in origens:
+        yield "cartaz " + origem, "cartaz-" + origem, montar_link(base, origem=origem)
+    for coletor in coletores:
+        yield "entrevista " + coletor, "entrevista-" + coletor, montar_link(base, origem="entrevista", coletor=coletor)
 
 
 def montar_cartaz(base, origem):
     link = montar_link(base, origem=origem)
-    svg = segno.make(link, error="q").svg_inline(scale=1, border=4, dark="#000000", light="#ffffff", omitsize=True)
+    svg = qr_de(link).svg_inline(scale=1, border=BORDA_QR, dark="#000000", light="#ffffff", omitsize=True)
     endereco = base.replace("https://", "").rstrip("/")
     return (
         MODELO_CARTAZ.replace("__QR__", svg)
@@ -129,16 +143,9 @@ def main():
     pasta_qr = PASTA / "qr"
     pasta_qr.mkdir(exist_ok=True)
     linhas = []
-
-    for origem in args.origens:
-        link = montar_link(base, origem=origem)
-        salvar_qr(segno.make(link, error="q"), "cartaz-" + origem, pasta_qr)
-        linhas.append("cartaz " + origem + "\t" + link)
-
-    for coletor in args.coletores:
-        link = montar_link(base, origem="entrevista", coletor=coletor)
-        salvar_qr(segno.make(link, error="q"), "entrevista-" + coletor, pasta_qr)
-        linhas.append("entrevista " + coletor + "\t" + link)
+    for rotulo, nome, link in entradas(base, args.origens, args.coletores):
+        salvar_qr(link, nome, pasta_qr)
+        linhas.append(rotulo + "\t" + link)
 
     cartazes = "\n".join(montar_cartaz(base, origem) for origem in args.origens)
     (PASTA / "cartazes.html").write_text(MODELO_CARTAZES.replace("__CARTAZES__", cartazes), encoding="utf-8")
