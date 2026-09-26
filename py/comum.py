@@ -1,7 +1,7 @@
 """Caminhos e leitura/gravacao dos arquivos de dados, compartilhados pelos scripts do repo."""
 import json, os
 
-RAIZ = os.path.dirname(os.path.abspath(__file__))
+RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DADOS = os.path.join(RAIZ, 'dados')
 CONTATO_APP = 'habitar-santana-usjt (projeto academico, uso pontual)'
 

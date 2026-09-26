@@ -72,7 +72,37 @@ def le_foto(cod, pasta_imgs, nome, ruas):
     return registro
 
 
-def pontos_da_rota(cod, pasta, pasta_imgs, ruas, sem_gps):
+class Numeracao:
+    """As legendas da planilha sao ligadas ao id do ponto, entao uma foto ja publicada
+    mantem o id para sempre e so as fotos novas recebem o proximo numero livre da rota.
+    O ultimo numero usado fica gravado em rotas.json para que o id de uma foto removida
+    nunca seja reaproveitado por outra."""
+
+    def __init__(self, pontos_atuais, rotas_atuais):
+        self.ids = {(p['t'], p['f']): p['id'] for p in pontos_atuais}
+        self.ultimo = {r['codigo']: r.get('ultimoNumero', 0) for r in rotas_atuais}
+        for p in pontos_atuais:
+            self.ultimo[p['t']] = max(self.ultimo.get(p['t'], 0), self._numero(p['id']))
+        self.novos = {}
+
+    @staticmethod
+    def _numero(id_ponto):
+        try:
+            return int(id_ponto.rsplit('-', 1)[1])
+        except (IndexError, ValueError):
+            return 0
+
+    def atribui(self, cod, registro):
+        existente = self.ids.get((cod, registro['f']))
+        if existente:
+            registro['id'] = existente
+            return
+        self.ultimo[cod] = self.ultimo.get(cod, 0) + 1
+        self.novos[cod] = self.novos.get(cod, 0) + 1
+        registro['id'] = '%s-%02d' % (cod, self.ultimo[cod])
+
+
+def pontos_da_rota(cod, pasta, pasta_imgs, ruas, numeracao, sem_gps):
     registros = []
     for nome in sorted(f for f in os.listdir(pasta_imgs) if f.lower().endswith(EXTENSOES)):
         try:
@@ -85,9 +115,9 @@ def pontos_da_rota(cod, pasta, pasta_imgs, ruas, sem_gps):
         else:
             registros.append(registro)
     registros.sort(key=lambda r: r['_ord'])
-    for i, registro in enumerate(registros, 1):
+    for registro in registros:
         registro.pop('_ord')
-        registro['id'] = '%s-%02d' % (cod, i)
+        numeracao.atribui(cod, registro)
     return registros
 
 
@@ -96,11 +126,15 @@ def rota_nova(cod, pasta):
             'achados': [['Anotações', 'Preencher com as observações de campo desta rota.']]}
 
 
-def mescla_rotas(vistas):
-    antigas = {r['codigo']: r for r in le_json(CAMINHO_ROTAS, [])}
+def mescla_rotas(antigas, vistas, ultimo):
+    antigas = {r['codigo']: r for r in antigas}
     codigos = [cod for cod, _ in vistas]
     rotas = [antigas.get(cod) or rota_nova(cod, pasta) for cod, pasta in vistas]
-    return rotas + [r for cod, r in antigas.items() if cod not in codigos]
+    rotas += [r for cod, r in antigas.items() if cod not in codigos]
+    for rota in rotas:
+        if ultimo.get(rota['codigo']):
+            rota['ultimoNumero'] = ultimo[rota['codigo']]
+    return rotas
 
 
 def grava_modelo_legendas(pontos):
@@ -110,10 +144,12 @@ def grava_modelo_legendas(pontos):
             fh.write(p['id'] + ',,,\n')
 
 
-def relatorio(pontos, rotas, vistas, sem_gps):
+def relatorio(pontos, rotas, vistas, novos, sem_gps):
     print('%d pontos em %d rotas' % (len(pontos), len(rotas)))
     for cod, _ in vistas:
-        print('  %-5s %d fotos' % (cod, len([p for p in pontos if p['t'] == cod])))
+        total = len([p for p in pontos if p['t'] == cod])
+        n = novos.get(cod, 0)
+        print('  %-5s %d fotos' % (cod, total) + (' (%d %s)' % (n, 'nova' if n == 1 else 'novas') if n else ''))
     if sem_gps:
         print('sem coordenada GPS (%d):' % len(sem_gps))
         for s in sem_gps[:LIMITE_LISTA_SEM_GPS]:
@@ -126,17 +162,19 @@ def main():
         sys.exit('Pasta de fotos nao encontrada: ' + FOTOS)
     os.makedirs(THUMBS, exist_ok=True)
     ruas = CacheRuas()
+    rotas_atuais = le_json(CAMINHO_ROTAS, [])
+    numeracao = Numeracao(le_json(dado('pontos.json'), []), rotas_atuais)
     pontos, vistas, sem_gps = [], [], []
     for cod, pasta, pasta_imgs in pastas_de_rotas(FOTOS):
         vistas.append((cod, pasta))
-        pontos.extend(pontos_da_rota(cod, pasta, pasta_imgs, ruas, sem_gps))
-    pontos.sort(key=lambda p: p['id'])
-    rotas = mescla_rotas(vistas)
+        pontos.extend(pontos_da_rota(cod, pasta, pasta_imgs, ruas, numeracao, sem_gps))
+    pontos.sort(key=lambda p: p['t'])
+    rotas = mescla_rotas(rotas_atuais, vistas, numeracao.ultimo)
     grava_json(dado('pontos.json'), pontos)
     grava_json(CAMINHO_ROTAS, rotas, compacto=False)
     ruas.salva()
     grava_modelo_legendas(pontos)
-    relatorio(pontos, rotas, vistas, sem_gps)
+    relatorio(pontos, rotas, vistas, numeracao.novos, sem_gps)
 
 
 if __name__ == '__main__':
