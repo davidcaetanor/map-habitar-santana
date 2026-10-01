@@ -8,3 +8,5 @@ Thumbs.db
 apps-script/
 __pycache__/
 *.idea
+credenciais*.json
+*-sa-key.json
