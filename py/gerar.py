@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Le o EXIF das fotos e gera as miniaturas e os arquivos de dados do mapa."""
-import os, re, sys
+import math, os, re, sys
 from PIL import Image, ImageOps
 from PIL.ExifTags import GPSTAGS
 from comum import RAIZ, dado, grava_json, le_json
 from ruas import CacheRuas
 
-FOTOS = sys.argv[1] if len(sys.argv) > 1 else os.path.join(RAIZ, 'fotos')
+FOTOS = os.path.join(RAIZ, 'fotos')
 THUMBS = os.path.join(RAIZ, 'thumbs')
 CAMINHO_ROTAS = dado('rotas.json')
 LADO = 760
@@ -56,6 +56,8 @@ def le_foto(cod, pasta_imgs, nome, ruas):
         return None
     lat = graus(gps['GPSLatitude'], gps.get('GPSLatitudeRef', 'S'))
     lon = graus(gps['GPSLongitude'], gps.get('GPSLongitudeRef', 'W'))
+    if not (math.isfinite(lat) and math.isfinite(lon)) or (lat == 0 and lon == 0):
+        raise ValueError('GPS apagado, a foto perdeu a localizacao ao ser copiada')
     quando = exif.get(EXIF_DATA_HORA) or ''
     destino = cod + '_' + nome
     gera_miniatura(im, destino)
@@ -157,15 +159,15 @@ def relatorio(pontos, rotas, vistas, novos, sem_gps):
     print('\nAtualizados: dados/pontos.json, dados/rotas.json, dados/legendas-modelo.csv e thumbs/')
 
 
-def main():
-    if not os.path.isdir(FOTOS):
-        sys.exit('Pasta de fotos nao encontrada: ' + FOTOS)
+def main(pasta_fotos=FOTOS):
+    if not os.path.isdir(pasta_fotos):
+        sys.exit('Pasta de fotos nao encontrada: ' + pasta_fotos)
     os.makedirs(THUMBS, exist_ok=True)
     ruas = CacheRuas()
     rotas_atuais = le_json(CAMINHO_ROTAS, [])
     numeracao = Numeracao(le_json(dado('pontos.json'), []), rotas_atuais)
     pontos, vistas, sem_gps = [], [], []
-    for cod, pasta, pasta_imgs in pastas_de_rotas(FOTOS):
+    for cod, pasta, pasta_imgs in pastas_de_rotas(pasta_fotos):
         vistas.append((cod, pasta))
         pontos.extend(pontos_da_rota(cod, pasta, pasta_imgs, ruas, numeracao, sem_gps))
     pontos.sort(key=lambda p: p['t'])
@@ -178,4 +180,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1] if len(sys.argv) > 1 else FOTOS)

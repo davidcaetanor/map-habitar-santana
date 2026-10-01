@@ -7,6 +7,7 @@ from comum import CONTATO_APP, dado, grava_json, le_json
 SAIDA = dado('tracados.json')
 SAIDA_AJUSTES = dado('ajustes.json')
 METROS_POR_GRAU = 111320.0
+TOLERANCIA_CAIXA = 1e-4
 MARGEM_RUAS_M = 120
 MARGEM_EDIF_M = 60
 DISTANCIA_MAX_M = 80
@@ -90,7 +91,8 @@ class Overpass:
             if nome != prefixo:
                 continue
             s, w, n, e = (float(v) for v in caixa_txt.split(','))
-            if s <= bbox[0] and w <= bbox[1] and n >= bbox[2] and e >= bbox[3]:
+            if s <= bbox[0] + TOLERANCIA_CAIXA and w <= bbox[1] + TOLERANCIA_CAIXA and \
+                    n >= bbox[2] - TOLERANCIA_CAIXA and e >= bbox[3] - TOLERANCIA_CAIXA:
                 return valor
         return None
 

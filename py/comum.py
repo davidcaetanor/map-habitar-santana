@@ -4,6 +4,9 @@ import json, os
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DADOS = os.path.join(RAIZ, 'dados')
 CONTATO_APP = 'habitar-santana-usjt (projeto academico, uso pontual)'
+DRIVE_PASTA_ID = os.environ.get('HABITAR_DRIVE_PASTA', '15_KRrEhFelbKNUNSOJpxxaI1e5VBmyOj')
+DRIVE_CREDENCIAIS = os.environ.get('HABITAR_CREDENCIAIS', os.path.join(
+    os.path.expanduser('~'), '.habitar-santana', 'credenciais-drive.json'))
 
 
 def dado(nome):
